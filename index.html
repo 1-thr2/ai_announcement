@@ -1611,14 +1611,14 @@
         </div>
       </div>
 
-      <!-- 버튼 -->
+  <!-- 버튼 -->
       <div class="button-container">
         <div class="left-buttons">
-          <button id="prevBtn" onclick="changeSlide(-1)">이전</button>
+          <button id="prevBtn" style="position: relative; z-index: 1001;" onclick="prevSlide()">이전</button>
         </div>
         <div class="right-buttons">
-          <button id="homeBtn" onclick="location.href='#slide1'; window.location.reload();" style="display: none;">처음으로</button>
-          <button id="nextBtn" onclick="changeSlide(1)">다음</button>
+          <button id="homeBtn" style="display: none; position: relative; z-index: 1001;" onclick="goHome()">처음으로</button>
+          <button id="nextBtn" style="position: relative; z-index: 1001;" onclick="nextSlide()">다음</button>
         </div>
       </div>
     </div>
