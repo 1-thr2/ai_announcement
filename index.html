@@ -77,6 +77,37 @@
       font-size: 18px;
       font-weight: 700;
       color: var(--primary);
+      flex-grow: 1;
+    }
+    
+    /* 검색 영역 */
+    .search-container {
+      display: flex;
+      align-items: center;
+      margin-left: auto;
+    }
+    #searchInput {
+      padding: 8px 12px;
+      border: 1px solid #e5e8ec;
+      border-radius: 20px 0 0 20px;
+      font-size: 14px;
+      width: 200px;
+      outline: none;
+    }
+    #searchInput:focus {
+      border-color: var(--primary);
+    }
+    #searchButton {
+      background-color: var(--primary);
+      color: white;
+      border: none;
+      padding: 8px 12px;
+      border-radius: 0 20px 20px 0;
+      cursor: pointer;
+      font-size: 14px;
+    }
+    #searchButton:hover {
+      background-color: var(--primary-dark);
     }
 
     /* 목차 네비게이션 */
@@ -803,6 +834,11 @@
       .assistant-card {
         flex: 1 1 100%;
       }
+      
+      /* 검색 영역 반응형 조정 */
+      .search-container {
+        display: none; /* 모바일에서는 검색 숨기기 */
+      }
     }
 
     @media (max-width: 480px) {
@@ -821,10 +857,14 @@
   </style>
 </head>
 <body>
-  <!-- 헤더 -->
+  <!-- 상단 고정 헤더 -->
   <header>
     <img src="Logo.png" alt="모비데이즈 로고" />
     <div class="header-title">웍스AI로 일하는 방식의 혁신</div>
+    <div class="search-container">
+      <input type="text" id="searchInput" placeholder="검색어 입력..." />
+      <button id="searchButton">검색</button>
+    </div>
   </header>
 
   <!-- 진행 바 -->
@@ -1221,13 +1261,296 @@
       </div>
     </section>
 
-    <!-- 슬라이드 6 ~ 슬라이드 9까지 같은 형식으로 계속... -->
     <!-- 슬라이드 6: 웍스AI 기본 사용법 -->
+    <section class="slide" id="slide5">
+      <div class="slide-content">
+        <h1>웍스AI 시작하기</h1>
+        
+        <div style="display: flex; justify-content: space-between; margin-bottom: 30px; flex-wrap: wrap; gap: 20px;">
+          <div style="flex: 1; min-width: 250px; background-color: white; border-radius: 12px; box-shadow: var(--shadow-light); padding: 20px; text-align: center; border: 1px solid #e5e8ec;">
+            <div style="width: 60px; height: 60px; background-color: var(--primary-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px;">
+              <span style="font-size: 24px; color: var(--primary);">1</span>
+            </div>
+            <h3 style="margin-bottom: 10px; color: var(--primary);">회원가입</h3>
+            <p style="color: var(--text-medium);">초대 메일의 링크를 통해<br>회사 이메일로 가입하세요</p>
+          </div>
+          
+          <div style="flex: 1; min-width: 250px; background-color: white; border-radius: 12px; box-shadow: var(--shadow-light); padding: 20px; text-align: center; border: 1px solid #e5e8ec;">
+            <div style="width: 60px; height: 60px; background-color: var(--primary-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px;">
+              <span style="font-size: 24px; color: var(--primary);">2</span>
+            </div>
+            <h3 style="margin-bottom: 10px; color: var(--primary);">비서 선택</h3>
+            <p style="color: var(--text-medium);">목적에 맞는 AI 비서를<br>선택하고 시작하세요</p>
+          </div>
+          
+          <div style="flex: 1; min-width: 250px; background-color: white; border-radius: 12px; box-shadow: var(--shadow-light); padding: 20px; text-align: center; border: 1px solid #e5e8ec;">
+            <div style="width: 60px; height: 60px; background-color: var(--primary-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px;">
+              <span style="font-size: 24px; color: var(--primary);">3</span>
+            </div>
+            <h3 style="margin-bottom: 10px; color: var(--primary);">첫 프롬프트</h3>
+            <p style="color: var(--text-medium);">구체적인 질문으로<br>대화를 시작하세요</p>
+          </div>
+        </div>
+        
+        <!-- 비서 유형 상세 설명 섹션 추가 -->
+        <h2>다양한 AI 비서 유형 알아보기</h2>
+        <p>목적과 업무 성격에 맞는 비서를 선택하면 더 효과적인 결과를 얻을 수 있습니다.</p>
+        
+        <div class="assistant-cards">
+          <div class="assistant-card">
+            <div class="assistant-icon">🧠</div>
+            <div class="assistant-title">신중한 똑쟁이</div>
+            <div class="assistant-model">GPT-4o 기반</div>
+            <div class="assistant-description">
+              정확하고 깊이 있는 분석과 고품질 콘텐츠 생성에 탁월합니다. 복잡한 개념을 명확하게 설명하고 전문적인 결과물이 필요할 때 적합합니다.
+            </div>
+            <div class="assistant-tags">
+              <span class="assistant-tag">정확성</span>
+              <span class="assistant-tag">복잡한 작업</span>
+              <span class="assistant-tag">심층 분석</span>
+            </div>
+          </div>
+          
+          <div class="assistant-card">
+            <div class="assistant-icon">❤️</div>
+            <div class="assistant-title">따뜻해진 똑쟁이</div>
+            <div class="assistant-model">GPT-4.5o 기반</div>
+            <div class="assistant-description">
+              최신 GPT-4.5o의 대화, 공감 능력과 정확한 결과물을 결합한 비서입니다. 감성적인 커뮤니케이션과 정확한 정보가 모두 필요할 때 적합합니다.
+            </div>
+            <div class="assistant-tags">
+              <span class="assistant-tag">균형감</span>
+              <span class="assistant-tag">공감 능력</span>
+              <span class="assistant-tag">창의적 작업</span>
+            </div>
+          </div>
+          
+          <div class="assistant-card">
+            <div class="assistant-icon">💬</div>
+            <div class="assistant-title">티키타카 장인</div>
+            <div class="assistant-model">GPT-4o mini 기반</div>
+            <div class="assistant-description">
+              빠른 응답 속도와 자연스러운 대화가 강점입니다. 간단한 질문, 아이디어 브레인스토밍, 일상적인 업무 보조에 적합하며 신속한 피드백이 필요할 때 효과적입니다.
+            </div>
+            <div class="assistant-tags">
+              <span class="assistant-tag">속도</span>
+              <span class="assistant-tag">대화형</span>
+              <span class="assistant-tag">일상 업무</span>
+            </div>
+          </div>
+          
+          <div class="assistant-card">
+            <div class="assistant-icon">👓</div>
+            <div class="assistant-title">느림보 어시스턴트</div>
+            <div class="assistant-model">맞춤형 모델</div>
+            <div class="assistant-description">
+              복잡한 문제에 대해 단계적으로 접근하며 철저하게 사고하는 비서입니다. 심층적인 문제 해결, 논리적 분석, 정교한 계획 수립에 적합합니다.
+            </div>
+            <div class="assistant-tags">
+              <span class="assistant-tag">단계적 접근</span>
+              <span class="assistant-tag">논리적 분석</span>
+              <span class="assistant-tag">철저함</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-divider"></div>
+        
+        <div class="highlight-box">
+          <strong>기능별 전문 비서도 활용해보세요!</strong>
+          <p style="margin-top: 10px; margin-bottom: 0;">
+            웍스AI는 특정 업무에 특화된 다양한 전문 비서도 제공합니다:
+          </p>
+          <ul style="margin-top: 12px; margin-bottom: 0;">
+            <li><span class="key-point">보고서/문서 작성:</span> 보고서 초안, 파워포인트 기획, 이메일 작성 등</li>
+            <li><span class="key-point">데이터 분석:</span> 데이터 시각화, 엑셀 함수 추천, SQL 쿼리 작성 등</li>
+            <li><span class="key-point">번역/교정:</span> 문서 번역, 영문 이메일 작성, 문장 교정 등</li>
+            <li><span class="key-point">그림/디자인:</span> 간단한 이미지 생성, 레이아웃 아이디어 제안 등</li>
+          </ul>
+        </div>
+        
+        <div class="tip">
+          <strong>시작 팁:</strong> 처음에는 간단한 질문부터 시작하고, 조금씩 복잡한 작업을 요청해보세요. 
+          AI와의 대화는 연습이 필요한 새로운 스킬입니다. 
+          첫 시도가 완벽하지 않아도 괜찮습니다. 피드백을 주면서 점차 개선해 나가세요.
+        </div>
+        
+        <div class="nav-buttons">
+          <button onclick="prevSlide()" class="nav-button prev">이전</button>
+          <button onclick="nextSlide()" class="nav-button next">다음</button>
+        </div>
+      </div>
+    </section>
+
     <!-- 슬라이드 7: 부서/역할별 활용 아이디어 -->
+    <section class="slide" id="slide6">
+      <div class="slide-content">
+        <h1>모비데이즈 부서별 AI 활용 방안</h1>
+        
+        <div class="team-cards">
+          <div class="team-card">
+            <h4>마케팅팀 (1~5팀)</h4>
+            <ul>
+              <li>매체별 캠페인 성과 분석 및 인사이트 도출</li>
+              <li>경쟁사 광고 전략 분석 및 벤치마킹</li>
+              <li>클라이언트 제안서 및 보고서 초안 작성</li>
+              <li>타겟 인사이트 및 크리에이티브 아이디어 발굴</li>
+            </ul>
+            <div class="chat-example" style="margin-top: 10px;">
+              <div class="chat-header">추천 프롬프트</div>
+              <div class="chat-messages">
+                <div class="chat-message">
+                  <div class="chat-avatar">나</div>
+                  <div class="chat-bubble">
+                    [광고주명] 앱 설치 캠페인의 지난 달 성과를 분석해줘. 예산 5천만원, 목표 CPI 7,000원이고, 실제 달성 CPI는 6,500원이었어. 매체별 성과는 페이스북 CPI 5,800원, 구글 UAC CPI 7,200원, 틱톡 CPI 6,300원이야. 가장 효율이 좋은 매체와 개선점에 대한 인사이트를 제시해줘.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="team-card">
+            <h4>Creative.Lab</h4>
+            <ul>
+              <li>신규 크리에이티브 콘셉트 및 바리에이션 생성</li>
+              <li>광고 카피 작성 및 다양한 버전 테스트</li>
+              <li>SNS 콘텐츠 기획 및 캘린더 수립</li>
+              <li>이미지 및 영상 스토리보드 아이디어 발굴</li>
+            </ul>
+            <div class="chat-example" style="margin-top: 10px;">
+              <div class="chat-header">추천 프롬프트</div>
+              <div class="chat-messages">
+                <div class="chat-message">
+                  <div class="chat-avatar">나</div>
+                  <div class="chat-bubble">
+                    [브랜드명]은 20-30대 여성 타겟 화장품 브랜드야. 이번에 신제품 "올데이 래스팅 파운데이션"을 출시하는데, 주요 포인트는 "24시간 지속력"과 "가벼운 사용감"이야. 인스타그램 광고용 카피 5가지 버전을 각각 30자 이내로 제안해줘. 타겟의 소통 방식과 트렌드를 고려해서 작성해줘.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="team-card">
+            <h4>데이터팀</h4>
+            <ul>
+              <li>대규모 데이터셋 통합 및 파이프라인 구축</li>
+              <li>고급 예측 모델링 및 머신러닝 적용</li>
+              <li>실시간 비즈니스 인텔리전스 대시보드 개발</li>
+              <li>사용자 행동 패턴 분석 및 세그먼트 발굴</li>
+            </ul>
+            <div class="chat-example" style="margin-top: 10px;">
+              <div class="chat-header">추천 프롬프트</div>
+              <div class="chat-messages">
+                <div class="chat-message">
+                  <div class="chat-avatar">나</div>
+                  <div class="chat-bubble">
+                    [데이터셋 첨부] 지난 6개월간의 사용자 활동 데이터를 분석하여 주요 사용자 세그먼트를 식별해줘. 특히 구매 전환율이 높은 그룹의 특성과 행동 패턴을 심층 분석하고, 이들을 타겟팅하기 위한 기계학습 모델 접근 방식을 제안해줘. 또한 이런 인사이트를 실시간으로 모니터링할 수 있는 대시보드 지표 항목도 추천해줘.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="team-card">
+            <h4>HRBP팀</h4>
+            <ul>
+              <li>인터뷰 평가서 작성 및 지원자 분석</li>
+              <li>직무 기술서 및 채용 공고문 작성</li>
+              <li>성과 평가 피드백 문구 개선</li>
+              <li>임직원 만족도 조사 결과 분석 및 인사이트 도출</li>
+            </ul>
+            <div class="chat-example" style="margin-top: 10px;">
+              <div class="chat-header">추천 프롬프트</div>
+              <div class="chat-messages">
+                <div class="chat-message">
+                  <div class="chat-avatar">나</div>
+                  <div class="chat-bubble">
+                    [인터뷰 녹취록 첨부] 이 마케팅 매니저 지원자의 인터뷰 내용을 요약하고, 핵심 역량, 강점, 개선점, 우리 회사 문화와의 적합성 측면에서 분석해줘. 또한 다음 단계 면접에서 더 깊게 물어봐야 할 질문 3가지를 추천해줘.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="highlight-box">
+          <strong>지금 바로 시작해보세요!</strong><br>
+          위 아이디어 중 하나를 선택해 웍스AI와 대화를 시작해보세요. 처음에는 단순한 요청으로 시작하고,
+          점차 맥락과 구체적인 요구사항을 추가하면서 결과물의 질을 향상시켜 보세요.
+        </div>
+        
+        <div class="ai-check-tip">
+          <strong>AI 응답 확인 질문</strong>
+          <div class="ai-check-questions">
+            <span class="ai-check-question">"이 정보의 출처는?"</span>
+            <span class="ai-check-question">"이 중 가장 확실한/불확실한 부분은?"</span>
+            <span class="ai-check-question">"어떻게 검증할 수 있을까?"</span>
+          </div>
+        </div>
+        
+        <div class="nav-buttons">
+          <button onclick="prevSlide()" class="nav-button prev">이전</button>
+          <button onclick="nextSlide()" class="nav-button next">다음</button>
+        </div>
+      </div>
+    </section>
+
     <!-- 슬라이드 8: 전사 지원 계획 -->
+    <section class="slide" id="slide7">
+      <div class="slide-content">
+        <h1>웍스AI 활용 지원 및 평가 계획</h1>
+        <p>웍스AI를 효과적으로 활용하고 업무 혁신을 이끌어낼 수 있도록 다양한 지원 프로그램을 준비하고 있습니다.</p>
+        
+        <div class="dual-box">
+          <div class="box">
+            <h3>단계별 지원 방향</h3>
+            <ul>
+              <li>초기: 팀별 소개 및 맞춤형 활용법 안내</li>
+              <li>적용: 실제 업무 적용 지원 및 문제 해결</li>
+              <li>확산: 성공 사례 공유 및 우수 사례 발굴</li>
+              <li>내재화: AI 활용이 일상 업무 프로세스로 정착</li>
+            </ul>
+          </div>
+          <div class="box">
+            <h3>주요 지원 프로그램</h3>
+            <ul>
+              <li>실시간 질의응답 채널 운영</li>
+              <li>정기적인 활용 팁 및 사례 공유</li>
+              <li>프롬프트 라이브러리 구축 및 공유</li>
+              <li>분기별 성과 분석 및 피드백</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="section-divider"></div>
+        
+        <div class="highlight-box">
+          <strong>AI 활용 역량은 평가와 보상에 반영됩니다</strong><br>
+          웍스AI의 효과적인 활용은 업무 효율성과 창의적 문제 해결에 직결되는 핵심 역량입니다.<br>
+          따라서 AI 활용 역량과 성과는 앞으로의 평가 및 보상 체계에 반영될 예정입니다.
+        </div>
+        
+        <div class="tip">
+          AI 활용 역량은 단순히 AI를 많이 사용하는 것이 아니라, AI를 통해 업무 효율과 품질을 높이고
+          창의적인 솔루션을 개발하는 능력을 의미합니다. 양적 사용보다 질적 활용에 초점을 맞춰 평가될 것입니다.
+        </div>
+        
+        <p><strong>성과 측정 방식:</strong></p>
+        <ul>
+          <li><span class="key-point">시간 효율화:</span> 동일 업무 대비 소요 시간 단축</li>
+          <li><span class="key-point">업무 품질:</span> 산출물의 정확성, 완성도, 창의성 향상</li>
+          <li><span class="key-point">혁신적 활용:</span> 새로운 업무 방식이나 솔루션 개발</li>
+          <li><span class="key-point">지식 공유:</span> 효과적인 AI 활용법 및 프롬프트 공유</li>
+        </ul>
+        
+        <div class="nav-buttons">
+          <button onclick="prevSlide()" class="nav-button prev">이전</button>
+          <button onclick="nextSlide()" class="nav-button next">다음</button>
+        </div>
+      </div>
+    </section>
+
     <!-- 슬라이드 9: 마무리 및 시작하기 -->
-    
-    <!-- 예시로 슬라이드 9만 구현 -->
     <section class="slide" id="slide8">
       <div class="slide-content">
         <h1>AI와 함께하는 새로운 시작</h1>
@@ -1288,6 +1611,43 @@
     var totalSlides = 9;
     var tocOpen = false;
 
+    // 검색 기능
+    function searchInSlides(keyword) {
+      if (!keyword || keyword.trim() === '') {
+        alert('검색어를 입력해주세요.');
+        return;
+      }
+      
+      keyword = keyword.toLowerCase();
+      var found = false;
+      var firstMatchIndex = -1;
+      
+      // 모든 슬라이드에서 검색
+      var slides = document.querySelectorAll('.slide');
+      for (var i = 0; i < slides.length; i++) {
+        var slideContent = slides[i].textContent.toLowerCase();
+        
+        if (slideContent.includes(keyword)) {
+          // 검색어가 발견된 첫 슬라이드 저장
+          if (firstMatchIndex === -1) {
+            firstMatchIndex = i;
+          }
+          
+          found = true;
+        }
+      }
+      
+      if (found && firstMatchIndex !== -1) {
+        // 첫 번째 일치하는 슬라이드로 이동
+        showSlide(firstMatchIndex);
+        
+        // 검색 결과 알림
+        alert('검색어 "' + keyword + '"이(가) 발견되었습니다.\n해당 슬라이드로 이동합니다.');
+      } else {
+        alert('검색어 "' + keyword + '"을(를) 찾을 수 없습니다.');
+      }
+    }
+
     // 문서가 로드되면 실행
     document.addEventListener('DOMContentLoaded', function() {
       // 사이드바 토글 기능
@@ -1298,6 +1658,20 @@
         tocOpen = !tocOpen;
         sidebarToggle.classList.toggle('open', tocOpen);
         toc.classList.toggle('open', tocOpen);
+      });
+      
+      // 검색 기능 초기화
+      var searchInput = document.getElementById('searchInput');
+      var searchButton = document.getElementById('searchButton');
+      
+      searchButton.addEventListener('click', function() {
+        searchInSlides(searchInput.value);
+      });
+      
+      searchInput.addEventListener('keypress', function(e) {
+        if (e.key === 'Enter') {
+          searchInSlides(searchInput.value);
+        }
       });
       
       // 초기 슬라이드와 진행 상태 표시
@@ -1347,6 +1721,12 @@
       var activeSlide = document.getElementById('slide' + index);
       if (activeSlide) {
         activeSlide.classList.add('active');
+        
+        // 슬라이드 콘텐츠의 스크롤 위치를 맨 위로 초기화
+        var slideContent = activeSlide.querySelector('.slide-content');
+        if (slideContent) {
+          slideContent.scrollTop = 0;
+        }
       }
       
       // 인덱스 업데이트
