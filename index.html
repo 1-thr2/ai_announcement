@@ -11,6 +11,7 @@
     href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap"
     rel="stylesheet"
   >
+  <!-- 타겟 기반 탐색을 위한 필요한 CSS 추가 -->
   <style>
     :root {
       /* 컬러 팔레트 */
@@ -47,10 +48,14 @@
       font-family: 'Noto Sans KR', sans-serif;
     }
 
+    html {
+      scroll-behavior: smooth; /* 부드러운 스크롤 효과 */
+    }
+
     body {
       background: var(--bg-gradient);
       color: var(--text-dark);
-      overflow: hidden;
+      overflow-x: hidden;
       line-height: 1.6;
     }
 
@@ -181,27 +186,35 @@
       list-style: none;
       padding: 16px 0;
     }
+    .slide-nav-link {
+      display: flex;
+      align-items: center;
+      width: 100%;
+      text-decoration: none;
+      color: var(--text-medium);
+    }
     .slide-nav-item {
-      padding: 12px 16px;
-      cursor: pointer;
       transition: background-color 0.2s ease;
       display: flex;
       align-items: center;
       border-left: 3px solid transparent;
       position: relative;
       z-index: 999;
+      padding: 0;
     }
     .slide-nav-item:hover {
       background-color: var(--primary-light);
     }
-    .slide-nav-item::after {
-      content: '';
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      z-index: 1000;
+    .slide-nav-item.active {
+      background-color: var(--primary-light);
+      border-left-color: var(--primary);
+      font-weight: 500;
+    }
+    .slide-nav-item a {
+      padding: 12px 16px;
+      width: 100%;
+      display: flex;
+      align-items: center;
     }
     .slide-nav-item.active {
       background-color: var(--primary-light);
@@ -508,7 +521,8 @@
       justify-content: space-between;
       margin-top: var(--space-xl);
     }
-    .button-container button {
+    .button-link {
+      display: inline-block;
       background-color: var(--primary);
       color: var(--white);
       border: none;
@@ -520,42 +534,27 @@
       transition: 0.2s ease;
       position: relative;
       overflow: hidden;
+      text-decoration: none;
+      text-align: center;
     }
-    .button-container button:hover:not(:disabled) {
-      background-color: var(--primary-light);
+    .button-link:hover {
+      background-color: var(--primary-dark);
+      color: var(--white);
     }
-    .button-container button:disabled {
-      background-color: #d1d5db;
-      cursor: not-allowed;
-    }
-    .button-container button#prevBtn {
+    #prevBtn.button-link {
       background-color: var(--white);
       color: var(--primary);
       border: 1px solid var(--primary);
     }
-    .button-container button#prevBtn:hover:not(:disabled) {
+    #prevBtn.button-link:hover {
       background-color: rgba(70, 115, 235, 0.05);
     }
-    .button-container button#homeBtn {
+    #homeBtn.button-link {
       background-color: var(--accent);
       color: var(--text-dark);
     }
-    .button-container button#homeBtn:hover {
+    #homeBtn.button-link:hover {
       background-color: var(--accent-dark);
-    }
-    .button-container button::after {
-      content: '';
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      top: 0;
-      left: 0;
-      background: rgba(255,255,255,0.15);
-      transform: translateY(100%);
-      transition: transform 0.3s ease;
-    }
-    .button-container button:active::after {
-      transform: translateY(0);
     }
 
     /* 이미지 배너 */
@@ -1013,7 +1012,7 @@
   <!-- 메인 컨테이너 -->
   <div class="container" id="container">
     <div class="card visible" id="cardContainer">
-      <!-- Slide 1: 도입부 -->
+      <!-- 각 슬라이드에 ID 부여 -->
       <div class="slide active" id="slide1">
         <h1>AI 시대의 새로운 일하는 방식</h1>
         <h2>왜 지금 AI를 써야 하며, 어떻게 나의 역량을 확장시킬 수 있을까요?</h2>
