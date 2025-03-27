@@ -4,35 +4,47 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>웍스AI 전사 도입 안내</title>
-  <!-- 폰트: Pretendard (토스와 유사한 현대적 폰트) -->
+  <!-- 폰트: Pretendard -->
   <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/variable/pretendardvariable.css" />
   <style>
     :root {
-      /* 토스 스타일 컬러 팔레트 */
-      --primary: #3182F6;  /* 토스 파란색 */
+      /* 모비데이즈 브랜드 컬러 */
+      --primary: #4673EB;      /* 파란색 */
       --primary-light: #E8F3FF;
-      --primary-dark: #1b64da;
-      --accent: #00D26A;   /* 토스 초록색 */
-      --accent-light: #E6F9EF;
+      --primary-dark: #3A62D7;
+      --accent: #F7D540;       /* 노란색 */
+      --accent-light: #FFF9DB;
+      --accent-dark: #E3B800;
+      
+      /* 기본 UI 컬러 */
       --bg: #ffffff;
       --bg-light: #f9fafb;
+      --bg-dark: #f0f3f9;
       --text-dark: #191F28;
       --text-medium: #4E5968;
       --text-light: #8B95A1;
       --border: #D7E2EB;
       --border-light: #EAF0F6;
       --error: #F24147;
-      --shadow: 0 1px 3px rgba(0,0,0,0.04);
-      --shadow-medium: 0 2px 6px rgba(0,0,0,0.04), 0 8px 24px rgba(0,0,0,0.06);
+      --success: #00C853;
+      
+      /* 그림자 */
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+      --shadow: 0 2px 6px rgba(0,0,0,0.06);
+      --shadow-lg: 0 4px 12px rgba(0,0,0,0.08);
+      
+      /* 라운드 */
       --radius-sm: 6px;
       --radius: 12px;
-      --radius-lg: 18px;
+      --radius-lg: 16px;
       
       /* 레이아웃 */
       --header-height: 64px;
-      --sidebar-width: 260px;
+      --sidebar-width: 280px;
       --sidebar-collapsed-width: 80px;
-      --transition: 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+      
+      /* 애니메이션 */
+      --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
     * {
@@ -54,7 +66,7 @@
       letter-spacing: -0.3px;
     }
 
-    /* 레이아웃 컨테이너 */
+    /* 레이아웃 */
     .app-container {
       display: flex;
       height: 100vh;
@@ -63,89 +75,139 @@
     /* 사이드바 */
     .sidebar {
       width: var(--sidebar-width);
-      background: var(--bg);
-      border-right: 1px solid var(--border-light);
       height: 100vh;
       position: fixed;
-      top: 0;
       left: 0;
+      top: 0;
+      background: var(--bg);
+      border-right: 1px solid var(--border-light);
       z-index: 100;
-      padding-top: var(--header-height);
+      display: flex;
+      flex-direction: column;
       transition: transform var(--transition), width var(--transition);
-      overflow-y: auto;
-      scrollbar-width: none; /* Firefox */
     }
-    .sidebar::-webkit-scrollbar {
-      display: none;
-    }
+    
     .sidebar-collapsed {
       width: var(--sidebar-collapsed-width);
     }
+    
     .sidebar-hidden {
       transform: translateX(-100%);
     }
     
-    /* 사이드바 내용 */
-    .sidebar-content {
-      padding: 16px;
-    }
+    /* 사이드바 헤더 */
     .sidebar-header {
-      padding: 12px 16px 24px;
+      height: var(--header-height);
+      padding: 0 16px;
       display: flex;
       align-items: center;
-      justify-content: space-between;
+      border-bottom: 1px solid var(--border-light);
     }
+    
+    .sidebar-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    
+    .sidebar-logo-img {
+      height: 32px;
+    }
+    
     .sidebar-title {
-      font-weight: 600;
-      font-size: 14px;
-      color: var(--text-medium);
-      letter-spacing: -0.3px;
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary);
+      white-space: nowrap;
+      transition: opacity var(--transition);
     }
-    .sidebar-collapse-btn {
-      border: none;
-      background: none;
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      cursor: pointer;
+    
+    .sidebar-collapsed .sidebar-title {
+      opacity: 0;
+      width: 0;
+      overflow: hidden;
+    }
+    
+    .sidebar-toggle {
+      width: 32px;
+      height: 32px;
       display: flex;
       align-items: center;
       justify-content: center;
+      border-radius: 50%;
+      border: 1px solid var(--border-light);
+      background: var(--bg);
+      cursor: pointer;
+      margin-left: auto;
       color: var(--text-medium);
+      transition: transform var(--transition);
     }
-    .sidebar-collapse-btn:hover {
-      background: var(--bg-light);
+    
+    .sidebar-collapsed .sidebar-toggle {
+      transform: rotate(180deg);
     }
-
-    /* 슬라이드 네비게이션 */
+    
+    /* 사이드바 내용 */
+    .sidebar-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 16px 0;
+    }
+    
+    .sidebar-content::-webkit-scrollbar {
+      width: 4px;
+    }
+    
+    .sidebar-content::-webkit-scrollbar-track {
+      background: transparent;
+    }
+    
+    .sidebar-content::-webkit-scrollbar-thumb {
+      background-color: var(--border);
+      border-radius: 2px;
+    }
+    
+    /* 목차 그룹 */
+    .toc-group {
+      margin-bottom: 24px;
+    }
+    
+    .toc-group-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--text-light);
+      padding: 8px 16px;
+      margin-bottom: 4px;
+    }
+    
+    /* 목차 아이템 */
     .toc-list {
       list-style: none;
-      margin-bottom: 32px;
     }
+    
     .toc-item {
       margin-bottom: 2px;
     }
+    
     .toc-link {
       display: flex;
       align-items: center;
       padding: 12px 16px;
       border-radius: var(--radius-sm);
-      color: var(--text-medium);
-      text-decoration: none;
-      font-size: 14px;
-      font-weight: 500;
       cursor: pointer;
-      transition: all 0.15s ease;
+      transition: all var(--transition);
+      margin: 0 8px;
     }
+    
     .toc-link:hover {
       background: var(--bg-light);
     }
+    
     .toc-link.active {
       background: var(--primary-light);
-      color: var(--primary);
-      font-weight: 600;
     }
-    .toc-number {
+    
+    .toc-icon {
       width: 24px;
       height: 24px;
       background: var(--bg);
@@ -154,36 +216,65 @@
       align-items: center;
       justify-content: center;
       margin-right: 12px;
-      font-size: 12px;
+      font-size: 14px;
       color: var(--text-medium);
-      flex-shrink: 0;
       border: 1px solid var(--border-light);
+      flex-shrink: 0;
     }
-    .toc-link.active .toc-number {
+    
+    .toc-link.active .toc-icon {
       background: var(--primary);
       color: white;
-      border: none;
+      border-color: var(--primary);
     }
-    .toc-text {
+    
+    .toc-content {
+      flex: 1;
+      min-width: 0;
+    }
+    
+    .toc-title {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--text-medium);
       white-space: nowrap;
       overflow: hidden;
       text-overflow: ellipsis;
       transition: opacity var(--transition);
     }
-    .sidebar-collapsed .toc-text {
+    
+    .toc-link.active .toc-title {
+      color: var(--primary);
+      font-weight: 600;
+    }
+    
+    .toc-desc {
+      font-size: 12px;
+      color: var(--text-light);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      transition: opacity var(--transition);
+      margin-top: 2px;
+    }
+    
+    .sidebar-collapsed .toc-content {
       opacity: 0;
       width: 0;
+      overflow: hidden;
     }
-
-    /* 메인 콘텐츠 영역 */
+    
+    /* 메인 콘텐츠 */
     .main-content {
-      flex: 1;
       margin-left: var(--sidebar-width);
+      flex: 1;
       transition: margin-left var(--transition);
     }
+    
     .main-content.sidebar-collapsed {
       margin-left: var(--sidebar-collapsed-width);
     }
+    
     .main-content.sidebar-hidden {
       margin-left: 0;
     }
@@ -192,7 +283,6 @@
     .header {
       height: var(--header-height);
       padding: 0 24px;
-      border-bottom: 1px solid var(--border-light);
       background: var(--bg);
       display: flex;
       align-items: center;
@@ -201,116 +291,164 @@
       right: 0;
       left: var(--sidebar-width);
       z-index: 99;
+      border-bottom: 1px solid var(--border-light);
       transition: left var(--transition);
     }
+    
     .header.sidebar-collapsed {
       left: var(--sidebar-collapsed-width);
     }
+    
     .header.sidebar-hidden {
       left: 0;
     }
+    
     .header-title {
       font-size: 18px;
       font-weight: 700;
       color: var(--text-dark);
-      flex-grow: 1;
-    }
-    .header-logo {
-      height: 32px;
-      margin-right: 12px;
     }
     
-    /* 모바일용 버튼 */
-    .sidebar-toggle {
-      display: none;
+    /* 모바일 토글 버튼 */
+    .mobile-toggle {
       width: 40px;
       height: 40px;
+      display: none;
       align-items: center;
       justify-content: center;
-      background: var(--bg);
-      border: 1px solid var(--border-light);
-      border-radius: 50%;
-      cursor: pointer;
       margin-right: 16px;
+      border-radius: 50%;
+      border: 1px solid var(--border-light);
+      background: var(--bg);
+      cursor: pointer;
     }
-    .sidebar-toggle span {
-      display: block;
-      width: 18px;
-      height: 2px;
-      background: var(--text-medium);
-      position: relative;
-      transition: all 0.3s ease;
+    
+    /* 프로그레스 인디케이터 */
+    .progress-indicator {
+      margin-left: auto;
+      margin-right: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
     }
-    .sidebar-toggle span::before,
-    .sidebar-toggle span::after {
-      content: '';
-      position: absolute;
-      width: 18px;
-      height: 2px;
-      background: var(--text-medium);
-      transition: all 0.3s ease;
+    
+    .progress-counter {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-medium);
     }
-    .sidebar-toggle span::before {
-      top: -6px;
+    
+    .progress-bar {
+      width: 80px;
+      height: 4px;
+      background: var(--border-light);
+      border-radius: 2px;
+      overflow: hidden;
     }
-    .sidebar-toggle span::after {
-      bottom: -6px;
+    
+    .progress-fill {
+      height: 100%;
+      background: var(--primary);
+      border-radius: 2px;
+      transition: width var(--transition);
     }
-
-    /* 검색 영역 */
+    
+    /* 검색 */
     .search-container {
       position: relative;
-      width: 280px;
-      margin-left: auto;
+      width: 320px;
     }
+    
     .search-input {
       width: 100%;
       height: 40px;
-      padding: 0 16px 0 40px;
+      padding: 0 40px 0 16px;
+      border-radius: 8px;
       border: 1px solid var(--border);
-      border-radius: 20px;
-      font-size: 14px;
-      outline: none;
-      color: var(--text-dark);
       background: var(--bg-light);
-      transition: all 0.2s ease;
+      font-size: 14px;
+      color: var(--text-dark);
+      transition: all var(--transition);
     }
+    
     .search-input:focus {
+      outline: none;
       border-color: var(--primary);
-      box-shadow: 0 0 0 2px rgba(49, 130, 246, 0.1);
+      box-shadow: 0 0 0 3px rgba(70, 115, 235, 0.12);
       background: var(--bg);
     }
-    .search-icon {
-      position: absolute;
-      left: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      color: var(--text-medium);
-      pointer-events: none;
+    
+    .search-input::placeholder {
+      color: var(--text-light);
     }
-    .search-clear {
+    
+    .search-icon {
       position: absolute;
       right: 12px;
       top: 50%;
       transform: translateY(-50%);
       width: 20px;
       height: 20px;
-      border-radius: 50%;
-      background: var(--text-light);
-      color: white;
-      font-size: 14px;
+      color: var(--text-light);
+      pointer-events: none;
+    }
+    
+    /* 검색 제안 */
+    .search-suggestions {
+      position: absolute;
+      top: 44px;
+      left: 0;
+      width: 100%;
+      background: var(--bg);
+      border-radius: 0 0 var(--radius) var(--radius);
+      border: 1px solid var(--border);
+      border-top: none;
+      box-shadow: var(--shadow);
+      z-index: 100;
+      display: none;
+    }
+    
+    .search-input:focus + .search-suggestions,
+    .search-suggestions:hover {
+      display: block;
+    }
+    
+    .suggestion-group {
+      padding: 8px 0;
+    }
+    
+    .suggestion-title {
+      font-size: 12px;
+      font-weight: 600;
+      color: var(--text-light);
+      padding: 4px 16px;
+    }
+    
+    .suggestion-item {
+      padding: 8px 16px;
       display: flex;
       align-items: center;
-      justify-content: center;
       cursor: pointer;
-      opacity: 0;
-      transition: opacity 0.2s ease;
+      transition: background var(--transition);
     }
-    .search-input:valid ~ .search-clear {
-      opacity: 1;
+    
+    .suggestion-item:hover {
+      background: var(--bg-light);
+    }
+    
+    .suggestion-icon {
+      width: 16px;
+      height: 16px;
+      margin-right: 8px;
+      color: var(--text-light);
+    }
+    
+    .suggestion-text {
+      font-size: 14px;
+      color: var(--text-medium);
     }
 
-    /* 슬라이드 내용 영역 */
+    /* 슬라이드 컨테이너 */
     .slides-container {
       height: 100vh;
       padding-top: var(--header-height);
@@ -324,105 +462,120 @@
       top: var(--header-height);
       left: 0;
       width: 100%;
-      height: calc(100% - var(--header-height));
+      height: calc(100vh - var(--header-height));
       opacity: 0;
       visibility: hidden;
-      z-index: 1;
-      transition: opacity 0.3s ease, visibility 0.3s ease;
       overflow-y: auto;
-      scrollbar-width: thin;
+      transition: opacity 0.3s ease, visibility 0.3s ease;
     }
-    .slide::-webkit-scrollbar {
-      width: 6px;
-    }
-    .slide::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    .slide::-webkit-scrollbar-thumb {
-      background: var(--border);
-      border-radius: 3px;
-    }
+    
     .slide.active {
       opacity: 1;
       visibility: visible;
       z-index: 10;
     }
+    
     .slide-inner {
-      max-width: 1000px;
+      max-width: 900px;
       margin: 0 auto;
       padding: 32px 40px 80px;
     }
-
-    /* 진행 상태 표시 */
-    .progress-container {
+    
+    /* 네비게이션 하단 바 */
+    .nav-bottom {
       position: fixed;
       bottom: 0;
       left: 0;
-      width: 100%;
+      right: 0;
       background: var(--bg);
       border-top: 1px solid var(--border-light);
-      padding: 14px 24px;
+      padding: 16px 24px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      z-index: 95;
+      z-index: 90;
     }
-    .progress-bar {
-      flex: 1;
+    
+    .nav-progress {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+    
+    .nav-counter {
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-medium);
+    }
+    
+    .nav-bar {
+      width: 200px;
       height: 4px;
       background: var(--border-light);
       border-radius: 2px;
       overflow: hidden;
-      margin: 0 16px;
     }
-    .progress-fill {
+    
+    .nav-fill {
       height: 100%;
       background: var(--primary);
       border-radius: 2px;
-      transition: width 0.3s ease;
+      transition: width var(--transition);
     }
-    .progress-count {
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--text-medium);
-    }
-    .progress-buttons {
+    
+    .nav-buttons {
       display: flex;
       gap: 8px;
     }
+    
     .nav-button {
-      height: 36px;
+      height: 40px;
       padding: 0 16px;
-      border: none;
       border-radius: var(--radius-sm);
       font-size: 14px;
       font-weight: 600;
-      cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
-      transition: all 0.2s ease;
+      cursor: pointer;
+      transition: all var(--transition);
+      border: none;
     }
+    
     .nav-button.primary {
       background: var(--primary);
       color: white;
     }
+    
     .nav-button.primary:hover {
       background: var(--primary-dark);
     }
+    
     .nav-button.secondary {
       background: var(--bg-light);
       color: var(--text-medium);
     }
+    
     .nav-button.secondary:hover {
       background: var(--border-light);
     }
+    
     .nav-button:disabled {
       opacity: 0.5;
       cursor: not-allowed;
     }
-    .nav-button-icon {
+    
+    .nav-icon {
+      width: 16px;
+      height: 16px;
+    }
+    
+    .nav-button .nav-icon-left {
       margin-right: 6px;
+    }
+    
+    .nav-button .nav-icon-right {
+      margin-left: 6px;
     }
 
     /* 토스트 메시지 */
@@ -431,12 +584,13 @@
       bottom: 80px;
       left: 50%;
       transform: translateX(-50%);
-      z-index: 1000;
+      z-index: 200;
       display: flex;
       flex-direction: column;
       gap: 8px;
       pointer-events: none;
     }
+    
     .toast {
       background: var(--text-dark);
       color: white;
@@ -444,27 +598,31 @@
       padding: 12px 20px;
       font-size: 14px;
       font-weight: 500;
-      box-shadow: var(--shadow-medium);
+      box-shadow: var(--shadow-lg);
       opacity: 0;
       transform: translateY(20px);
-      transition: opacity 0.3s ease, transform 0.3s ease;
+      transition: all var(--transition);
       pointer-events: auto;
     }
+    
     .toast.show {
       opacity: 1;
       transform: translateY(0);
     }
+    
     .toast.success {
-      background: var(--accent);
+      background: var(--success);
     }
+    
     .toast.error {
       background: var(--error);
     }
-
-    /* 슬라이드 검색 결과 하이라이트 */
+    
+    /* 검색 결과 하이라이트 */
     .search-highlight {
-      background: rgba(255, 212, 38, 0.4);
-      padding: 2px 0;
+      background: var(--accent-light);
+      color: var(--accent-dark);
+      padding: 0 2px;
       border-radius: 2px;
     }
 
@@ -475,16 +633,16 @@
       color: var(--text-dark);
       margin-bottom: 16px;
       line-height: 1.3;
-      letter-spacing: -0.5px;
     }
+    
     h2 {
-      font-size: 22px;
+      font-size: 20px;
       font-weight: 600;
       color: var(--text-medium);
       margin-bottom: 20px;
       line-height: 1.4;
-      letter-spacing: -0.3px;
     }
+    
     p {
       font-size: 16px;
       line-height: 1.7;
@@ -492,558 +650,361 @@
       margin-bottom: 16px;
     }
     
-    /* 핵심 텍스트 강조 스타일 */
     .key-point {
       font-weight: 600;
       color: var(--primary);
     }
     
-    /* 글자 단위 하이라이트 */
     .highlight-text {
-      background-color: #FFF3BF;
-      padding: 2px 0;
+      background: var(--accent-light);
+      padding: 0 2px;
+      border-radius: 2px;
     }
     
-    /* 단락 구분 스타일 */
-    .section-divider {
+    .divider {
       height: 1px;
-      background-color: var(--border-light);
+      background: var(--border-light);
       margin: 24px 0;
       width: 100%;
-      clear: both;
-    }
-
-    /* ul, ol 분리하여 스타일 */
-    ul {
-      list-style: none;
-      margin: 0 0 20px 0;
-      padding: 0;
-    }
-    ul li {
-      position: relative;
-      padding-left: 24px;
-      margin-bottom: 12px;
-      font-size: 16px;
-    }
-    ul li::before {
-      content: "";
-      position: absolute;
-      left: 6px;
-      top: 10px;
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background-color: var(--primary);
     }
     
-    /* 중요 리스트 아이템 강조 */
-    ul li.highlight {
-      background-color: var(--primary-light);
-      padding: 12px 24px;
-      border-radius: var(--radius-sm);
-    }
-
-    ol {
-      list-style: decimal;
-      margin: 0 0 20px 24px;
-      padding: 0;
-    }
-    ol li {
-      margin-bottom: 12px;
-      font-size: 16px;
-      padding-left: 8px;
-    }
-
     /* 하이라이트 박스 */
     .highlight-box {
       background: var(--primary-light);
       border-radius: var(--radius);
       padding: 24px;
       margin-bottom: 24px;
-      box-shadow: var(--shadow);
       position: relative;
-      overflow: hidden;
+      box-shadow: var(--shadow-sm);
     }
+    
     .highlight-box::before {
       content: '';
       position: absolute;
       left: 0;
       top: 0;
-      height: 100%;
+      bottom: 0;
       width: 4px;
       background: var(--primary);
-    }
-    .highlight-box strong {
-      font-weight: 700;
-      color: var(--primary);
-      font-size: 17px;
-      display: block;
-      margin-bottom: 8px;
-    }
-
-    /* 메트릭 카드 */
-    .metrics {
-      display: flex;
-      gap: 16px;
-      margin: 24px 0;
-    }
-    .metric-card {
-      flex: 1;
-      background: var(--bg);
-      border-radius: var(--radius);
-      padding: 24px;
-      text-align: center;
-      box-shadow: var(--shadow);
-      border: 1px solid var(--border-light);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .metric-card:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-medium);
-    }
-    .metric-value {
-      font-size: 36px;
-      font-weight: 700;
-      color: var(--primary);
-      margin-bottom: 4px;
-    }
-    .metric-label {
-      font-size: 14px;
-      color: var(--text-medium);
-      font-weight: 500;
-    }
-
-    /* 듀얼 박스 */
-    .dual-box {
-      display: flex;
-      gap: 16px;
-      margin-bottom: 24px;
+      border-radius: var(--radius) 0 0 var(--radius);
     }
     
-    /* box 스타일링 */
-    .box {
-      flex: 1;
-      background: var(--bg-light);
-      border-radius: var(--radius);
-      padding: 24px;
+    .highlight-box-title {
       font-size: 16px;
-      color: var(--text-dark);
-      border: 1px solid var(--border-light);
-    }
-    .box ul {
-      margin-bottom: 0;
-    }
-    .box li {
-      margin-bottom: 10px;
-    }
-    .box li:last-child {
-      margin-bottom: 0;
-    }
-    .box h3 {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--text-dark);
-      margin-bottom: 16px;
-    }
-
-    /* 인용구 */
-    blockquote {
-      font-size: 16px;
-      font-style: italic;
-      color: var(--text-medium);
-      border-left: 4px solid var(--primary);
-      padding: 16px 24px;
-      margin: 24px 0;
-      background: var(--bg-light);
-      border-radius: 0 var(--radius) var(--radius) 0;
-    }
-
-    /* 비교 테이블 */
-    .comparison-table {
-      width: 100%;
-      border-collapse: separate;
-      border-spacing: 0;
-      margin-bottom: 24px;
-      overflow: hidden;
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-    }
-    .comparison-table th, .comparison-table td {
-      padding: 16px;
-      text-align: left;
-      border-bottom: 1px solid var(--border-light);
-    }
-    .comparison-table th {
-      background: var(--bg-light);
       font-weight: 600;
-      color: var(--text-dark);
-    }
-    .comparison-table tr:last-child td {
-      border-bottom: none;
-    }
-    .comparison-table tr td:first-child {
-      font-weight: 500;
-    }
-    
-    /* 팀별 카드 */
-    .team-cards {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-    .team-card {
-      flex: 1 1 calc(50% - 16px);
-      min-width: 240px;
-      background: var(--bg);
-      border-radius: var(--radius);
-      padding: 24px;
-      border: 1px solid var(--border-light);
-      box-shadow: var(--shadow);
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-    }
-    .team-card:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow-medium);
-    }
-    .team-card h4 {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--text-dark);
+      color: var(--primary);
       margin-bottom: 12px;
     }
     
-    /* 예시 대화 */
-    .chat-example {
-      border: 1px solid var(--border-light);
-      border-radius: var(--radius);
-      margin-bottom: 24px;
-      overflow: hidden;
+    /* 카드 그리드 */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 16px;
+      margin: 24px 0;
+    }
+    
+    .card {
       background: var(--bg);
+      border-radius: var(--radius);
+      border: 1px solid var(--border-light);
+      padding: 24px;
+      transition: transform var(--transition), box-shadow var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .card:hover {
+      transform: translateY(-2px);
       box-shadow: var(--shadow);
     }
+    
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+      font-size: 20px;
+    }
+    
+    .card-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 8px;
+    }
+    
+    .card-subtitle {
+      font-size: 14px;
+      color: var(--text-light);
+      margin-bottom: 12px;
+    }
+    
+    .card-desc {
+      font-size: 14px;
+      color: var(--text-medium);
+      line-height: 1.5;
+    }
+
+    /* 리스트 */
+    ul {
+      list-style: none;
+      margin: 0 0 20px 0;
+    }
+    
+    ul li {
+      padding-left: 24px;
+      position: relative;
+      margin-bottom: 12px;
+      font-size: 16px;
+    }
+    
+    ul li::before {
+      content: '';
+      position: absolute;
+      left: 6px;
+      top: 10px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--primary);
+    }
+    
+    ul.highlight li::before {
+      background: var(--accent);
+    }
+    
+    ul li.highlighted {
+      background: var(--primary-light);
+      border-radius: var(--radius-sm);
+      padding: 12px 24px;
+    }
+    
+    /* 대화 예시 */
+    .chat-example {
+      background: var(--bg);
+      border-radius: var(--radius);
+      border: 1px solid var(--border-light);
+      margin-bottom: 24px;
+      overflow: hidden;
+      box-shadow: var(--shadow-sm);
+    }
+    
     .chat-header {
       background: var(--primary-light);
       color: var(--primary);
-      padding: 12px 16px;
       font-weight: 600;
+      padding: 12px 16px;
       font-size: 14px;
     }
+    
     .chat-messages {
       padding: 16px;
     }
+    
     .chat-message {
-      margin-bottom: 16px;
       display: flex;
-      align-items: flex-start;
+      margin-bottom: 16px;
     }
+    
     .chat-message:last-child {
       margin-bottom: 0;
     }
+    
     .chat-avatar {
       width: 36px;
       height: 36px;
       border-radius: 50%;
-      background: var(--primary-light);
-      color: var(--primary);
+      margin-right: 12px;
+      flex-shrink: 0;
       display: flex;
       align-items: center;
       justify-content: center;
       font-weight: 600;
-      margin-right: 12px;
-      flex-shrink: 0;
       font-size: 14px;
     }
+    
+    .chat-avatar.user {
+      background: var(--primary-light);
+      color: var(--primary);
+    }
+    
     .chat-avatar.ai {
       background: var(--accent-light);
-      color: var(--accent);
+      color: var(--accent-dark);
     }
+    
     .chat-bubble {
       background: var(--bg-light);
       padding: 12px 16px;
       border-radius: 0 var(--radius-sm) var(--radius-sm) var(--radius-sm);
       max-width: calc(100% - 48px);
       font-size: 14px;
+      line-height: 1.6;
     }
+    
     .chat-bubble.ai {
       background: var(--bg);
       border: 1px solid var(--border-light);
       border-radius: var(--radius-sm) 0 var(--radius-sm) var(--radius-sm);
     }
-
-    /* 비서 카드 스타일 */
-    .assistant-cards {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      margin: 24px 0;
-    }
-    .assistant-card {
-      flex: 1 1 250px;
-      background: var(--bg);
-      border-radius: var(--radius);
-      border: 1px solid var(--border-light);
-      padding: 24px;
-      transition: transform 0.2s ease, box-shadow 0.2s ease;
-      position: relative;
-      overflow: hidden;
-      box-shadow: var(--shadow);
-    }
-    .assistant-card:hover {
-      transform: translateY(-4px);
-      box-shadow: var(--shadow-medium);
-    }
-    .assistant-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-    }
-    .assistant-card:nth-child(1) .assistant-icon {
-      background: #E8F3FF;
-      color: #3182F6;
-    }
-    .assistant-card:nth-child(2) .assistant-icon {
-      background: #FFF0E6;
-      color: #FF7043;
-    }
-    .assistant-card:nth-child(3) .assistant-icon {
-      background: #F3E8FF;
-      color: #9C27B0;
-    }
-    .assistant-card:nth-child(4) .assistant-icon {
-      background: #E6F9EF;
-      color: #00D26A;
-    }
-    .assistant-title {
-      font-size: 18px;
-      font-weight: 700;
-      margin-bottom: 6px;
-      color: var(--text-dark);
-    }
-    .assistant-model {
-      font-size: 14px;
-      color: var(--text-light);
-      margin-bottom: 12px;
-    }
-    .assistant-description {
-      font-size: 14px;
-      color: var(--text-medium);
-      line-height: 1.5;
-      margin-bottom: 16px;
-    }
-    .assistant-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-    .assistant-tag {
-      font-size: 12px;
-      background: var(--primary-light);
-      color: var(--primary);
-      padding: 4px 8px;
-      border-radius: 12px;
-      font-weight: 500;
-    }
-
-    /* 팁 스타일 */
-    .tip {
+    
+    /* 팁 박스 */
+    .tip-box {
       background: var(--accent-light);
       border-radius: var(--radius);
       padding: 24px;
-      font-size: 16px;
-      color: var(--text-dark);
-      line-height: 1.6;
       margin: 24px 0;
       position: relative;
-      overflow: hidden;
+      box-shadow: var(--shadow-sm);
     }
-    .tip::before {
-      content: "";
+    
+    .tip-box::before {
+      content: '';
       position: absolute;
       left: 0;
       top: 0;
-      height: 100%;
+      bottom: 0;
       width: 4px;
       background: var(--accent);
+      border-radius: var(--radius) 0 0 var(--radius);
     }
-    .tip strong {
+    
+    .tip-title {
+      font-weight: 600;
+      color: var(--accent-dark);
+      margin-bottom: 8px;
+      display: flex;
+      align-items: center;
+    }
+    
+    .tip-title::before {
+      content: '💡';
+      margin-right: 8px;
+    }
+
+    /* 메트릭 박스 */
+    .metrics {
+      display: flex;
+      gap: 16px;
+      margin: 24px 0;
+    }
+    
+    .metric-box {
+      flex: 1;
+      background: var(--bg);
+      border-radius: var(--radius);
+      padding: 20px;
+      text-align: center;
+      border: 1px solid var(--border-light);
+      transition: transform var(--transition), box-shadow var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .metric-box:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+    
+    .metric-value {
+      font-size: 36px;
       font-weight: 700;
-      color: var(--accent);
-      display: block;
+      color: var(--primary);
       margin-bottom: 8px;
     }
     
-    /* AI 응답 확인 팁 스타일 수정 */
-    .ai-check-tip {
-      background: var(--primary-light);
-      border-radius: var(--radius);
-      padding: 24px;
-      font-size: 16px;
-      color: var(--text-dark);
-      line-height: 1.6;
-      margin: 24px 0;
-      position: relative;
-      overflow: hidden;
-    }
-    .ai-check-tip::before {
-      content: "";
-      position: absolute;
-      left: 0;
-      top: 0;
-      height: 100%;
-      width: 4px;
-      background: var(--primary);
-    }
-    .ai-check-tip strong {
-      color: var(--primary);
-      font-weight: 700;
-      display: block;
-      margin-bottom: 12px;
-    }
-    .ai-check-questions {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-      margin-top: 12px;
-    }
-    .ai-check-question {
-      background: var(--bg);
-      border-radius: var(--radius-sm);
-      padding: 8px 12px;
-      box-shadow: var(--shadow);
-      font-style: italic;
+    .metric-label {
       font-size: 14px;
-    }
-
-    /* 사례 카드 */
-    .case-study {
-      background: var(--bg);
-      border-radius: var(--radius);
-      border: 1px solid var(--border-light);
-      margin-bottom: 24px;
-      overflow: hidden;
-      box-shadow: var(--shadow);
-    }
-    .case-header {
-      padding: 16px 24px;
-      background: var(--primary-light);
-      display: flex;
-      align-items: center;
-    }
-    .case-icon {
-      width: 40px;
-      height: 40px;
-      border-radius: 50%;
-      background: var(--primary);
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 18px;
-      font-weight: 600;
-      margin-right: 16px;
-    }
-    .case-title {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--primary);
-    }
-    .case-content {
-      padding: 24px;
-    }
-    .case-quote {
-      font-style: italic;
       color: var(--text-medium);
-      margin-top: 16px;
+      font-weight: 500;
     }
 
-    /* 반응형 디자인 */
+    /* 반응형 스타일 */
     @media (max-width: 1200px) {
       .slide-inner {
         max-width: 800px;
       }
     }
-
+    
     @media (max-width: 992px) {
-      .sidebar {
+      .search-container {
         width: 240px;
       }
-      .main-content {
-        margin-left: 240px;
-      }
-      .header {
-        left: 240px;
-      }
+      
       .slide-inner {
-        padding: 24px 32px 60px;
+        padding: 24px 32px 80px;
+      }
+      
+      .card-grid {
+        grid-template-columns: repeat(2, 1fr);
       }
     }
-
+    
     @media (max-width: 768px) {
       .sidebar {
         transform: translateX(-100%);
       }
-      .sidebar-toggle {
-        display: flex;
-      }
+      
       .main-content {
         margin-left: 0;
       }
+      
       .header {
         left: 0;
       }
-      .search-container {
-        width: 200px;
+      
+      .mobile-toggle {
+        display: flex;
       }
-      .progress-container {
-        padding: 12px 16px;
-      }
-      .dual-box {
-        flex-direction: column;
-      }
-      h1 {
-        font-size: 28px;
-      }
-      h2 {
-        font-size: 20px;
-      }
-      .slide-inner {
-        padding: 20px 24px 60px;
-      }
-      .metrics {
-        flex-direction: column;
-      }
-      .team-card {
-        flex: 1 1 100%;
-      }
-      .assistant-card {
-        flex: 1 1 100%;
-      }
-    }
-
-    @media (max-width: 576px) {
+      
       .search-container {
         display: none;
       }
-      .progress-bar {
-        margin: 0 8px;
+      
+      .progress-indicator {
+        margin-left: auto;
       }
+      
+      .slide-inner {
+        padding: 20px 24px 80px;
+      }
+      
+      .metrics {
+        flex-direction: column;
+        gap: 12px;
+      }
+      
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      h1 {
+        font-size: 26px;
+      }
+      
+      h2 {
+        font-size: 18px;
+      }
+    }
+    
+    @media (max-width: 576px) {
+      .header-title {
+        font-size: 16px;
+      }
+      
+      .nav-bar {
+        width: 100px;
+      }
+      
       .nav-button {
         padding: 0 12px;
+        font-size: 13px;
       }
-      h1 {
-        font-size: 24px;
-      }
-      p, ul li, ol li {
-        font-size: 15px;
-      }
+      
       .slide-inner {
-        padding: 16px 20px 60px;
+        padding: 16px 20px 80px;
       }
     }
   </style>
@@ -1053,84 +1014,162 @@
     <!-- 사이드바 -->
     <nav class="sidebar" id="sidebar">
       <div class="sidebar-header">
-        <div class="sidebar-title">목차</div>
-        <button class="sidebar-collapse-btn" id="sidebarCollapseBtn">
-          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
+        <div class="sidebar-logo">
+          <img src="logo.png" alt="모비데이즈 로고" class="sidebar-logo-img">
+          <div class="sidebar-title">웍스AI 가이드</div>
+        </div>
+        <button class="sidebar-toggle" id="sidebarToggle">
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
         </button>
       </div>
+      
       <div class="sidebar-content">
-        <ul class="toc-list" id="tocList">
-          <li class="toc-item">
-            <div class="toc-link active" onclick="goToSlide(0)">
-              <div class="toc-number">1</div>
-              <div class="toc-text">AI 시대의 새로운 일하는 방식</div>
-            </div>
-          </li>
-          <li class="toc-item">
-            <div class="toc-link" onclick="goToSlide(1)">
-              <div class="toc-number">2</div>
-              <div class="toc-text">AI 시대의 역량 재정의</div>
-            </div>
-          </li>
-          <li class="toc-item">
-            <div class="toc-link" onclick="goToSlide(2)">
-              <div class="toc-number">3</div>
-              <div class="toc-text">AI 활용의 현실적 격차</div>
-            </div>
-          </li>
-          <li class="toc-item">
-            <div class="toc-link" onclick="goToSlide(3)">
-              <div class="toc-number">4</div>
-              <div class="toc-text">웍스AI 활용 사례와 프롬프트 예시</div>
-            </div>
-          </li>
-          <li class="toc-item">
-            <div class="toc-link" onclick="goToSlide(4)">
-              <div class="toc-number">5</div>
-              <div class="toc-text">웍스AI를 제대로 활용하는 방법</div>
-            </div>
-          </li>
-          <li class="toc-item">
-            <div class="toc-link" onclick="goToSlide(5)">
-              <div class="toc-number">6</div>
-              <div class="toc-text">웍스AI 시작하기</div>
-            </div>
-          </li>
-          <li class="toc-item">
-            <div class="toc-link" onclick="goToSlide(6)">
-              <div class="toc-number">7</div>
-              <div class="toc-text">모비데이즈 부서별 AI 활용 방안</div>
-            </div>
-          </li>
-          <li class="toc-item">
-            <div class="toc-link" onclick="goToSlide(7)">
-              <div class="toc-number">8</div>
-              <div class="toc-text">웍스AI 활용 지원 및 평가 계획</div>
-            </div>
-          </li>
-          <li class="toc-item">
-            <div class="toc-link" onclick="goToSlide(8)">
-              <div class="toc-number">9</div>
-              <div class="toc-text">AI와 함께하는 새로운 시작</div>
-            </div>
-          </li>
-        </ul>
+        <!-- 시작하기 그룹 -->
+        <div class="toc-group">
+          <div class="toc-group-title">AI 개요</div>
+          <ul class="toc-list">
+            <li class="toc-item">
+              <div class="toc-link active" data-slide="0">
+                <div class="toc-icon">1</div>
+                <div class="toc-content">
+                  <div class="toc-title">새로운 일하는 방식</div>
+                  <div class="toc-desc">업무 효율 30% 향상하기</div>
+                </div>
+              </div>
+            </li>
+            <li class="toc-item">
+              <div class="toc-link" data-slide="1">
+                <div class="toc-icon">2</div>
+                <div class="toc-content">
+                  <div class="toc-title">역량 재정의</div>
+                  <div class="toc-desc">AI 시대에 필요한 핵심 스킬</div>
+                </div>
+              </div>
+            </li>
+            <li class="toc-item">
+              <div class="toc-link" data-slide="2">
+                <div class="toc-icon">3</div>
+                <div class="toc-content">
+                  <div class="toc-title">활용의 현실적 격차</div>
+                  <div class="toc-desc">AI 활용 vs 미활용 비교</div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+        
+        <!-- 활용하기 그룹 -->
+        <div class="toc-group">
+          <div class="toc-group-title">활용 가이드</div>
+          <ul class="toc-list">
+            <li class="toc-item">
+              <div class="toc-link" data-slide="3">
+                <div class="toc-icon">4</div>
+                <div class="toc-content">
+                  <div class="toc-title">활용 사례와 프롬프트</div>
+                  <div class="toc-desc">실무에 바로 적용 가능한 예시</div>
+                </div>
+              </div>
+            </li>
+            <li class="toc-item">
+              <div class="toc-link" data-slide="4">
+                <div class="toc-icon">5</div>
+                <div class="toc-content">
+                  <div class="toc-title">제대로 활용하기</div>
+                  <div class="toc-desc">프롬프트 작성 5가지 원칙</div>
+                </div>
+              </div>
+            </li>
+            <li class="toc-item">
+              <div class="toc-link" data-slide="5">
+                <div class="toc-icon">6</div>
+                <div class="toc-content">
+                  <div class="toc-title">시작하기</div>
+                  <div class="toc-desc">회원가입부터 첫 질문까지</div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
+        
+        <!-- 활용 전략 그룹 -->
+        <div class="toc-group">
+          <div class="toc-group-title">활용 전략</div>
+          <ul class="toc-list">
+            <li class="toc-item">
+              <div class="toc-link" data-slide="6">
+                <div class="toc-icon">7</div>
+                <div class="toc-content">
+                  <div class="toc-title">부서별 활용 방안</div>
+                  <div class="toc-desc">팀별 맞춤 활용 가이드</div>
+                </div>
+              </div>
+            </li>
+            <li class="toc-item">
+              <div class="toc-link" data-slide="7">
+                <div class="toc-icon">8</div>
+                <div class="toc-content">
+                  <div class="toc-title">지원 및 평가 계획</div>
+                  <div class="toc-desc">AI 역량에 따른 성과 평가</div>
+                </div>
+              </div>
+            </li>
+            <li class="toc-item">
+              <div class="toc-link" data-slide="8">
+                <div class="toc-icon">9</div>
+                <div class="toc-content">
+                  <div class="toc-title">새로운 시작</div>
+                  <div class="toc-desc">바로 실행할 수 있는 3단계</div>
+                </div>
+              </div>
+            </li>
+          </ul>
+        </div>
       </div>
     </nav>
 
-    <!-- 메인 콘텐츠 영역 -->
+    <!-- 메인 콘텐츠 -->
     <main class="main-content" id="mainContent">
       <!-- 헤더 -->
       <header class="header" id="header">
-        <button class="sidebar-toggle" id="sidebarToggle">
-          <span></span>
+        <button class="mobile-toggle" id="mobileToggle">
+          <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
         </button>
-        <img src="Logo.png" alt="모비데이즈 로고" class="header-logo" />
-        <div class="header-title">웍스AI로 일하는 방식의 혁신</div>
+        
+        <h1 class="header-title">웍스AI로 일하는 방식의 혁신</h1>
+        
+        <div class="progress-indicator">
+          <div class="progress-counter" id="progressCounter">1/9</div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill" style="width: 11%;"></div>
+          </div>
+        </div>
+        
         <div class="search-container">
-          <input type="text" id="searchInput" class="search-input" placeholder="검색어 입력" required>
-          <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>
-          <div class="search-clear" id="searchClear">×</div>
+          <input type="text" id="searchInput" class="search-input" placeholder="AI 활용 사례, 프롬프트 검색하기">
+          <svg class="search-icon" xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+          
+          <div class="search-suggestions">
+            <div class="suggestion-group">
+              <div class="suggestion-title">자주 찾는 내용</div>
+              <div class="suggestion-item">
+                <svg class="suggestion-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <div class="suggestion-text">보고서 작성 프롬프트</div>
+              </div>
+              <div class="suggestion-item">
+                <svg class="suggestion-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <div class="suggestion-text">마케팅팀 AI 활용</div>
+              </div>
+              <div class="suggestion-item">
+                <svg class="suggestion-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <div class="suggestion-text">SNS 콘텐츠 기획</div>
+              </div>
+              <div class="suggestion-item">
+                <svg class="suggestion-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
+                <div class="suggestion-text">업무 시간 절약</div>
+              </div>
+            </div>
+          </div>
         </div>
       </header>
 
@@ -1143,33 +1182,32 @@
             <h2>왜 지금 AI를 써야 하며, 어떻게 나의 역량을 확장시킬 수 있을까요?</h2>
 
             <div class="highlight-box">
-              <strong>전 세계 마케팅 전문가들이 이미 AI로 일상 업무의 30%를 자동화하고 있습니다. 우리는 어떨까요?</strong>
-              지금 우리는 AI가 업무 방식을 완전히 재정의하는 시대를 살고 있습니다.<br>
-              이 발표에서는 AI가 우리의 일상 업무를 어떻게 바꿀 수 있는지, 그리고 
-              '웍스AI'를 어떻게 활용하면 더 창의적이고 효율적으로 일할 수 있는지 함께 알아보겠습니다.
+              <div class="highlight-box-title">전 세계 마케팅 전문가들이 이미 AI로 일상 업무의 30%를 자동화하고 있습니다</div>
+              <p>지금 우리는 AI가 업무 방식을 완전히 재정의하는 시대를 살고 있습니다.</p>
+              <p>이 가이드에서는 AI가 우리의 일상 업무를 어떻게 바꿀 수 있는지, 그리고 '웍스AI'를 어떻게 활용하면 더 창의적이고 효율적으로 일할 수 있는지 함께 알아보겠습니다.</p>
             </div>
             
             <div class="metrics">
-              <div class="metric-card">
+              <div class="metric-box">
                 <div class="metric-value">30%</div>
                 <div class="metric-label">업무 시간 단축</div>
               </div>
-              <div class="metric-card">
+              <div class="metric-box">
                 <div class="metric-value">240+</div>
-                <div class="metric-label">연간 절약 시간(시간)</div>
+                <div class="metric-label">연간 절약 시간</div>
               </div>
-              <div class="metric-card">
+              <div class="metric-box">
                 <div class="metric-value">2-3x</div>
                 <div class="metric-label">아이디어 발굴 속도</div>
               </div>
             </div>
 
             <p>여러분이 자문해볼 질문들:</p>
-            <ul>
-              <li class="highlight">내 업무 시간을 하루에 1-2시간 이상 절약할 수 있다면?</li>
-              <li class="highlight">반복적인 작업 대신 진짜 중요한 일에 집중할 수 있다면?</li>
-              <li class="highlight">창의적인 아이디어를 2-3배 더 빠르게 발전시킬 수 있다면?</li>
-              <li class="highlight">내 전문성을 10배 더 효과적으로 활용할 수 있다면?</li>
+            <ul class="highlight">
+              <li class="highlighted">내 업무 시간을 하루에 1-2시간 이상 절약할 수 있다면?</li>
+              <li class="highlighted">반복적인 작업 대신 진짜 중요한 일에 집중할 수 있다면?</li>
+              <li class="highlighted">창의적인 아이디어를 2-3배 더 빠르게 발전시킬 수 있다면?</li>
+              <li class="highlighted">내 전문성을 10배 더 효과적으로 활용할 수 있다면?</li>
             </ul>
 
             <p>이 모든 것이 오늘부터 <span class="key-point">웍스AI</span>로 가능합니다.</p>
@@ -1183,9 +1221,9 @@
             <p>AI의 등장은 우리가 생각하는 "역량"이라는 개념을 완전히 바꿔놓았습니다. 특히 LLM 기반 AI의 급속한 발전으로 <span class="highlight-text">AI를 사용하는 사람과 사용하지 않는 사람 간의 격차</span>가 급격히 벌어지고 있습니다.</p>
             
             <div class="highlight-box">
-              <strong>맥킨지 글로벌 연구소의 "AI 시대의 직무 역량 변화" 연구에 따르면</strong>
-              인공지능이 발전할수록 기업에서 필요로 하는 인재 역량이 크게 달라지고 있습니다.<br>
-              데이터 분석이나 단순 작업은 AI가 대체하는 반면, 인간 고유의 창의력과 판단력은 더 중요해집니다.
+              <div class="highlight-box-title">맥킨지 글로벌 연구소의 "AI 시대의 직무 역량 변화" 연구에 따르면</div>
+              <p>인공지능이 발전할수록 기업에서 필요로 하는 인재 역량이 크게 달라지고 있습니다.</p>
+              <p>데이터 분석이나 단순 작업은 AI가 대체하는 반면, 인간 고유의 창의력과 판단력은 더 중요해집니다.</p>
             </div>
             
             <h2>AI 시대에 달라지는 업무 역량:</h2>
@@ -1196,7 +1234,7 @@
               <li><span class="key-point">감성적 소통/공감 능력:</span> 여전히 사람의 고유 영역으로 더욱 중요해짐</li>
             </ul>
 
-            <div class="section-divider"></div>
+            <div class="divider"></div>
             
             <h2>AI 시대에 더욱 중요해지는 역량:</h2>
             <ul>
@@ -1205,7 +1243,7 @@
               <li><span class="key-point">창의적 종합력:</span> AI의 다양한 아이디어를 연결하여 새로운 가치를 창출하는 능력</li>
             </ul>
 
-            <blockquote>
+            <blockquote style="font-size: 16px; font-style: italic; color: var(--primary); border-left: 4px solid var(--primary); padding: 16px 24px; margin: 24px 0; background: var(--primary-light); border-radius: 0 var(--radius) var(--radius) 0;">
               "AI 시대에는 단순히 정보를 아는 것보다 정보를 어떻게 활용하고 평가하는지가 더 중요합니다.<br>
               이제 전문가란 모든 것을 아는 사람이 아니라, 필요한 정보를 AI와 함께 효과적으로 찾아내고 활용하는 사람입니다."
             </blockquote>
@@ -1218,44 +1256,44 @@
             <h1>AI 활용의 현실적 격차</h1>
             <p>같은 역할과 책임을 가진 두 사람의 실제 업무 현실을 비교해보겠습니다.</p>
             
-            <div class="comparison-table">
-              <table style="width:100%;">
+            <div style="overflow-x: auto; margin: 24px 0; border-radius: var(--radius); box-shadow: var(--shadow-sm); border: 1px solid var(--border-light);">
+              <table style="width: 100%; border-collapse: collapse;">
                 <thead>
-                  <tr>
-                    <th style="width: 30%;">업무 활동</th>
-                    <th style="width: 35%;">AI 없이 일하는 직원</th>
-                    <th style="width: 35%;">AI와 함께 일하는 직원</th>
+                  <tr style="background: var(--primary-light);">
+                    <th style="width: 30%; padding: 16px; text-align: left; font-weight: 600; color: var(--primary); border-bottom: 1px solid var(--border-light);">업무 활동</th>
+                    <th style="width: 35%; padding: 16px; text-align: left; font-weight: 600; color: var(--text-dark); border-bottom: 1px solid var(--border-light);">AI 없이 일하는 직원</th>
+                    <th style="width: 35%; padding: 16px; text-align: left; font-weight: 600; color: var(--primary); border-bottom: 1px solid var(--border-light); background: rgba(70, 115, 235, 0.08);">AI와 함께 일하는 직원</th>
                   </tr>
                 </thead>
                 <tbody>
                   <tr>
-                    <td>아침 업무 계획</td>
-                    <td>15-20분 수동 계획</td>
-                    <td><strong>5분</strong> - AI가 우선순위 제안</td>
+                    <td style="padding: 16px; font-weight: 500; border-bottom: 1px solid var(--border-light);">아침 업무 계획</td>
+                    <td style="padding: 16px; border-bottom: 1px solid var(--border-light);">15-20분 수동 계획</td>
+                    <td style="padding: 16px; border-bottom: 1px solid var(--border-light); background: rgba(70, 115, 235, 0.02);"><strong>5분</strong> - AI가 우선순위 제안</td>
                   </tr>
                   <tr>
-                    <td>보고서 작성</td>
-                    <td>3-5시간 작성</td>
-                    <td><strong>1.5-2시간</strong> - 초안 생성 후 편집</td>
+                    <td style="padding: 16px; font-weight: 500; border-bottom: 1px solid var(--border-light);">보고서 작성</td>
+                    <td style="padding: 16px; border-bottom: 1px solid var(--border-light);">3-5시간 작성</td>
+                    <td style="padding: 16px; border-bottom: 1px solid var(--border-light); background: rgba(70, 115, 235, 0.02);"><strong>1.5-2시간</strong> - 초안 생성 후 편집</td>
                   </tr>
                   <tr>
-                    <td>아이디어 발굴</td>
-                    <td>1시간 브레인스토밍</td>
-                    <td><strong>20-30분</strong> - AI 제안 확장</td>
+                    <td style="padding: 16px; font-weight: 500; border-bottom: 1px solid var(--border-light);">아이디어 발굴</td>
+                    <td style="padding: 16px; border-bottom: 1px solid var(--border-light);">1시간 브레인스토밍</td>
+                    <td style="padding: 16px; border-bottom: 1px solid var(--border-light); background: rgba(70, 115, 235, 0.02);"><strong>20-30분</strong> - AI 제안 확장</td>
                   </tr>
                   <tr>
-                    <td>주간 절약 시간</td>
-                    <td>기준</td>
-                    <td><strong>약 10시간</strong> (→ 연간 480시간)</td>
+                    <td style="padding: 16px; font-weight: 500;">주간 절약 시간</td>
+                    <td style="padding: 16px;">기준</td>
+                    <td style="padding: 16px; background: rgba(70, 115, 235, 0.02);"><strong>약 10시간</strong> (→ 연간 480시간)</td>
                   </tr>
                 </tbody>
               </table>
             </div>
 
             <div class="highlight-box">
-              <strong>이 격차는 계속 커지고 있습니다</strong>
-              AI를 능숙하게 활용하는 전문가들은 이미 하루 평균 2시간 이상을 절약하고 있습니다.<br>
-              이는 연간 <span class="highlight-text">480시간 이상</span>(약 60일의 업무일)에 해당하는 엄청난 시간입니다!
+              <div class="highlight-box-title">이 격차는 계속 커지고 있습니다</div>
+              <p>AI를 능숙하게 활용하는 전문가들은 이미 하루 평균 2시간 이상을 절약하고 있습니다.</p>
+              <p>이는 연간 <span class="highlight-text">480시간 이상</span>(약 60일의 업무일)에 해당하는 엄청난 시간입니다!</p>
             </div>
 
             <p><strong>실질적인 의미:</strong></p>
@@ -1272,92 +1310,78 @@
           <div class="slide-inner">
             <h1>웍스AI 활용 사례와 프롬프트 예시</h1>
             
-            <div class="case-study">
-              <div class="case-header">
-                <div class="case-icon">P</div>
-                <div class="case-title">캠페인 결과 보고서 작성</div>
-              </div>
-              <div class="case-content">
-                <div class="chat-example">
-                  <div class="chat-header">효과적인 프롬프트 예시</div>
-                  <div class="chat-messages">
-                    <div class="chat-message">
-                      <div class="chat-avatar">나</div>
-                      <div class="chat-bubble">
-                        다음 정보를 바탕으로 '게임앱 설치 캠페인 결과 보고서'를 작성해줘:
-                        
-                        1. 클라이언트: ABC게임즈
-                        2. 캠페인 기간: 2025년 2월 1일~28일
-                        3. 총 예산: 5,000만원
-                        4. 주요 타겟: 20-35세 남성, 액션게임 선호층
-                        5. 캠페인 목표: CPI 12,000원 이하, 10,000건 설치
-                        6. 매체별 성과:
-                           - 페이스북: 예산 2,000만원, 설치 4,500건, CPI 10,800원
-                           - 구글 UAC: 예산 1,500만원, 설치 2,300건, CPI 13,200원
-                           - 틱톡: 예산 1,500만원, 설치 3,800건, CPI 9,800원
-                        
-                        7. 추가 요청사항:
-                           - 가장 효율이 좋았던 매체와 그 이유 분석
-                           - 다음 캠페인을 위한 3가지 개선점 제안
-                           - 경쟁사 대비 성과 비교 (업계 평균 CPI: 14,000원)
-                           - 클라이언트 경영진을 위한 핵심 성과 요약 (3줄 이내)
-                      </div>
-                    </div>
+            <div class="chat-example">
+              <div class="chat-header">캠페인 결과 보고서 작성</div>
+              <div class="chat-messages">
+                <div class="chat-message">
+                  <div class="chat-avatar user">나</div>
+                  <div class="chat-bubble">
+                    다음 정보를 바탕으로 '게임앱 설치 캠페인 결과 보고서'를 작성해줘:
+                    
+                    1. 클라이언트: ABC게임즈
+                    2. 캠페인 기간: 2025년 2월 1일~28일
+                    3. 총 예산: 5,000만원
+                    4. 주요 타겟: 20-35세 남성, 액션게임 선호층
+                    5. 캠페인 목표: CPI 12,000원 이하, 10,000건 설치
+                    6. 매체별 성과:
+                       - 페이스북: 예산 2,000만원, 설치 4,500건, CPI 10,800원
+                       - 구글 UAC: 예산 1,500만원, 설치 2,300건, CPI 13,200원
+                       - 틱톡: 예산 1,500만원, 설치 3,800건, CPI 9,800원
+                    
+                    7. 추가 요청사항:
+                       - 가장 효율이 좋았던 매체와 그 이유 분석
+                       - 다음 캠페인을 위한 3가지 개선점 제안
+                       - 경쟁사 대비 성과 비교 (업계 평균 CPI: 14,000원)
+                       - 클라이언트 경영진을 위한 핵심 성과 요약 (3줄 이내)
                   </div>
                 </div>
-                
-                <p><strong>AI 활용 핵심 포인트:</strong></p>
-                <ul>
-                  <li>구체적인 수치와 목표를 명확히 제시</li>
-                  <li>원하는 분석 항목과 인사이트를 구체적으로 요청</li>
-                  <li>보고서 구조와 필요한 섹션을 미리 안내</li>
-                </ul>
               </div>
             </div>
             
-            <div class="case-study">
-              <div class="case-header">
-                <div class="case-icon">S</div>
-                <div class="case-title">클라이언트 SNS 콘텐츠 기획</div>
-              </div>
-              <div class="case-content">
-                <div class="chat-example">
-                  <div class="chat-header">실제 적용 프롬프트 템플릿</div>
-                  <div class="chat-messages">
-                    <div class="chat-message">
-                      <div class="chat-avatar">나</div>
-                      <div class="chat-bubble">
-                        다음은 [클라이언트명] 브랜드 정보야:
-                        
-                        브랜드: [브랜드명]
-                        제품/서비스: [제품/서비스 설명]
-                        타겟 오디언스: [주 타겟층 설명]
-                        브랜드 톤앤매너: [브랜드 어조와 스타일]
-                        핵심 가치: [브랜드가 중요시하는 가치]
-                        
-                        다음 달 [인스타그램/페이스북/틱톡] 콘텐츠 캘린더를 위한 15개의 포스팅 아이디어를 제안해줘. 각 아이디어는 다음 형식으로 작성해줘:
-                        
-                        1. 제목:
-                        2. 콘텐츠 유형: (이미지, 캐러셀, 릴스, 스토리 등)
-                        3. 핵심 메시지:
-                        4. 사용할 해시태그:
-                        5. CTA(Call-to-Action):
-                        
-                        다음 요소를 고려해줘:
-                        - [특정 시즌/이벤트]
-                        - [최근 트렌드]
-                        - [이전 게시물 중 반응이 좋았던 유형]
-                        - 경쟁사와 차별화되는 콘텐츠
-                      </div>
-                    </div>
+            <div style="background: var(--bg-light); border-radius: var(--radius); padding: 20px; margin: 24px 0;">
+              <h3 style="font-size: 16px; font-weight: 600; margin-bottom: 16px; color: var(--primary);">AI 활용 핵심 포인트</h3>
+              <ul>
+                <li>구체적인 수치와 목표를 명확히 제시</li>
+                <li>원하는 분석 항목과 인사이트를 구체적으로 요청</li>
+                <li>보고서 구조와 필요한 섹션을 미리 안내</li>
+              </ul>
+            </div>
+            
+            <div class="chat-example">
+              <div class="chat-header">클라이언트 SNS 콘텐츠 기획</div>
+              <div class="chat-messages">
+                <div class="chat-message">
+                  <div class="chat-avatar user">나</div>
+                  <div class="chat-bubble">
+                    다음은 [클라이언트명] 브랜드 정보야:
+                    
+                    브랜드: [브랜드명]
+                    제품/서비스: [제품/서비스 설명]
+                    타겟 오디언스: [주 타겟층 설명]
+                    브랜드 톤앤매너: [브랜드 어조와 스타일]
+                    핵심 가치: [브랜드가 중요시하는 가치]
+                    
+                    다음 달 [인스타그램/페이스북/틱톡] 콘텐츠 캘린더를 위한 15개의 포스팅 아이디어를 제안해줘. 각 아이디어는 다음 형식으로 작성해줘:
+                    
+                    1. 제목:
+                    2. 콘텐츠 유형: (이미지, 캐러셀, 릴스, 스토리 등)
+                    3. 핵심 메시지:
+                    4. 사용할 해시태그:
+                    5. CTA(Call-to-Action):
+                    
+                    다음 요소를 고려해줘:
+                    - [특정 시즌/이벤트]
+                    - [최근 트렌드]
+                    - [이전 게시물 중 반응이 좋았던 유형]
+                    - 경쟁사와 차별화되는 콘텐츠
                   </div>
                 </div>
-                
-                <div class="tip">
-                  <strong>프롬프트 템플릿 활용 팁</strong>
-                  이 템플릿을 저장해두고 클라이언트마다 맞춤형으로 수정하여 사용하면 일관된 품질의 콘텐츠 아이디어를 빠르게 얻을 수 있습니다.
-                </div>
               </div>
+            </div>
+            
+            <div class="tip-box">
+              <div class="tip-title">프롬프트 템플릿 활용 팁</div>
+              <p>이 템플릿을 저장해두고 클라이언트마다 맞춤형으로 수정하여 사용하면 일관된 품질의 콘텐츠 아이디어를 빠르게 얻을 수 있습니다.</p>
             </div>
           </div>
         </section>
@@ -1368,27 +1392,27 @@
             <h1>웍스AI를 제대로 활용하는 방법</h1>
             <p>AI를 활용할 때 가장 중요한 것은 <span class="key-point">"AI의 결과물은 내 수준을 넘을 수 없다"</span>는 점을 이해하는 것입니다.</p>
             
-            <div style="background: var(--bg-light); border-radius: var(--radius); padding: 24px; margin: 24px 0; box-shadow: var(--shadow);">
-              <h3 style="font-size: 20px; color: var(--primary); margin-bottom: 20px; text-align: center; font-weight: 700;">프롬프트 작성 마스터 5원칙</h3>
+            <div style="background: var(--bg-light); border-radius: var(--radius); padding: 24px; margin: 24px 0; box-shadow: var(--shadow-sm);">
+              <h3 style="font-size: 18px; font-weight: 700; color: var(--primary); margin-bottom: 20px; text-align: center;">프롬프트 작성 마스터 5원칙</h3>
               <div style="display: flex; flex-wrap: wrap; gap: 12px;">
-                <div style="flex: 1; min-width: 200px; background: white; padding: 16px; border-radius: var(--radius-sm); box-shadow: var(--shadow); border: 1px solid var(--border-light);">
-                  <strong style="color: var(--primary); font-weight: 600; font-size: 16px; display: block; margin-bottom: 8px;">1. 목표 명확화</strong>
+                <div style="flex: 1; min-width: 200px; background: var(--bg); padding: 20px; border-radius: var(--radius-sm); box-shadow: var(--shadow-sm); border-left: 3px solid var(--primary);">
+                  <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 16px;">1. 목표 명확화</div>
                   <p style="margin: 0; font-size: 14px; color: var(--text-medium);">무슨 일을 위해 AI에게 묻는지 분명히 하세요</p>
                 </div>
-                <div style="flex: 1; min-width: 200px; background: white; padding: 16px; border-radius: var(--radius-sm); box-shadow: var(--shadow); border: 1px solid var(--border-light);">
-                  <strong style="color: var(--primary); font-weight: 600; font-size: 16px; display: block; margin-bottom: 8px;">2. 맥락 제공</strong>
+                <div style="flex: 1; min-width: 200px; background: var(--bg); padding: 20px; border-radius: var(--radius-sm); box-shadow: var(--shadow-sm); border-left: 3px solid var(--primary);">
+                  <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 16px;">2. 맥락 제공</div>
                   <p style="margin: 0; font-size: 14px; color: var(--text-medium);">타겟, 브랜드, 예산, 경쟁사 등 배경 정보를 주세요</p>
                 </div>
-                <div style="flex: 1; min-width: 200px; background: white; padding: 16px; border-radius: var(--radius-sm); box-shadow: var(--shadow); border: 1px solid var(--border-light);">
-                  <strong style="color: var(--primary); font-weight: 600; font-size: 16px; display: block; margin-bottom: 8px;">3. 결과물 형태 지정</strong>
+                <div style="flex: 1; min-width: 200px; background: var(--bg); padding: 20px; border-radius: var(--radius-sm); box-shadow: var(--shadow-sm); border-left: 3px solid var(--primary);">
+                  <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 16px;">3. 결과물 형태 지정</div>
                   <p style="margin: 0; font-size: 14px; color: var(--text-medium);">표, 리스트, 문단 등 원하는 형식을 알려주세요</p>
                 </div>
-                <div style="flex: 1; min-width: 200px; background: white; padding: 16px; border-radius: var(--radius-sm); box-shadow: var(--shadow); border: 1px solid var(--border-light);">
-                  <strong style="color: var(--primary); font-weight: 600; font-size: 16px; display: block; margin-bottom: 8px;">4. 제한 조건 명시</strong>
+                <div style="flex: 1; min-width: 200px; background: var(--bg); padding: 20px; border-radius: var(--radius-sm); box-shadow: var(--shadow-sm); border-left: 3px solid var(--primary);">
+                  <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 16px;">4. 제한 조건 명시</div>
                   <p style="margin: 0; font-size: 14px; color: var(--text-medium);">글자 수, 시간, 예산 등 제약사항을 알려주세요</p>
                 </div>
-                <div style="flex: 1; min-width: 200px; background: white; padding: 16px; border-radius: var(--radius-sm); box-shadow: var(--shadow); border: 1px solid var(--border-light);">
-                  <strong style="color: var(--primary); font-weight: 600; font-size: 16px; display: block; margin-bottom: 8px;">5. 변별력 요구</strong>
+                <div style="flex: 1; min-width: 200px; background: var(--bg); padding: 20px; border-radius: var(--radius-sm); box-shadow: var(--shadow-sm); border-left: 3px solid var(--primary);">
+                  <div style="font-weight: 600; color: var(--primary); margin-bottom: 8px; font-size: 16px;">5. 변별력 요구</div>
                   <p style="margin: 0; font-size: 14px; color: var(--text-medium);">옵션별 장단점, 우선순위 등 비교 분석을 요청하세요</p>
                 </div>
               </div>
@@ -1398,7 +1422,7 @@
               <div class="chat-header">일반적인 질문 vs 구체적인 질문</div>
               <div class="chat-messages">
                 <div class="chat-message">
-                  <div class="chat-avatar">나</div>
+                  <div class="chat-avatar user">나</div>
                   <div class="chat-bubble">SNS 콘텐츠 아이디어 추천해줘</div>
                 </div>
                 <div class="chat-message">
@@ -1408,7 +1432,7 @@
                   </div>
                 </div>
                 <div class="chat-message">
-                  <div class="chat-avatar">나</div>
+                  <div class="chat-avatar user">나</div>
                   <div class="chat-bubble">
                     20-30대 남성 타겟의 스포츠 브랜드 인스타그램용 콘텐츠 아이디어를 추천해줘. 
                     브랜드는 "활동적인 라이프스타일"을 강조하고, 최근 신발 신제품을 런칭했어. 
@@ -1424,10 +1448,9 @@
               </div>
             </div>
             
-            <div class="tip">
-              <strong>일상 업무에 녹여내기</strong>
-              웍스AI는 단순한 답변 도구가 아니라 '사고의 확장 도구'입니다.
-              내가 가진 전문성과 지식을 바탕으로 AI와 대화하며 함께 더 나은 결과물을 만들어가는 과정이 중요합니다.
+            <div class="tip-box">
+              <div class="tip-title">일상 업무에 녹여내기</div>
+              <p>웍스AI는 단순한 답변 도구가 아니라 '사고의 확장 도구'입니다. 내가 가진 전문성과 지식을 바탕으로 AI와 대화하며 함께 더 나은 결과물을 만들어가는 과정이 중요합니다.</p>
             </div>
           </div>
         </section>
@@ -1437,101 +1460,70 @@
           <div class="slide-inner">
             <h1>웍스AI 시작하기</h1>
             
-            <div style="display: flex; justify-content: space-between; margin-bottom: 32px; flex-wrap: wrap; gap: 24px;">
-              <div style="flex: 1; min-width: 250px; background-color: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px; text-align: center; border: 1px solid var(--border-light);">
-                <div style="width: 60px; height: 60px; background-color: var(--primary-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
-                  <span style="font-size: 24px; color: var(--primary);">1</span>
+            <div class="card-grid">
+              <div class="card">
+                <div class="card-icon" style="background: var(--primary-light); color: var(--primary);">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
                 </div>
-                <h3 style="margin-bottom: 12px; color: var(--text-dark); font-weight: 700; font-size: 18px;">회원가입</h3>
-                <p style="color: var(--text-medium); margin: 0;">초대 메일의 링크를 통해<br>회사 이메일로 가입하세요</p>
+                <div class="card-title">회원가입</div>
+                <div class="card-desc">초대 메일의 링크를 통해 회사 이메일로 가입하세요</div>
               </div>
               
-              <div style="flex: 1; min-width: 250px; background-color: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px; text-align: center; border: 1px solid var(--border-light);">
-                <div style="width: 60px; height: 60px; background-color: var(--primary-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
-                  <span style="font-size: 24px; color: var(--primary);">2</span>
+              <div class="card">
+                <div class="card-icon" style="background: var(--primary-light); color: var(--primary);">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"></path><circle cx="9" cy="7" r="4"></circle><path d="M23 21v-2a4 4 0 0 0-3-3.87"></path><path d="M16 3.13a4 4 0 0 1 0 7.75"></path></svg>
                 </div>
-                <h3 style="margin-bottom: 12px; color: var(--text-dark); font-weight: 700; font-size: 18px;">비서 선택</h3>
-                <p style="color: var(--text-medium); margin: 0;">목적에 맞는 AI 비서를<br>선택하고 시작하세요</p>
+                <div class="card-title">비서 선택</div>
+                <div class="card-desc">목적에 맞는 AI 비서를 선택하고 시작하세요</div>
               </div>
               
-              <div style="flex: 1; min-width: 250px; background-color: white; border-radius: var(--radius); box-shadow: var(--shadow); padding: 24px; text-align: center; border: 1px solid var(--border-light);">
-                <div style="width: 60px; height: 60px; background-color: var(--primary-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">
-                  <span style="font-size: 24px; color: var(--primary);">3</span>
+              <div class="card">
+                <div class="card-icon" style="background: var(--primary-light); color: var(--primary);">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
                 </div>
-                <h3 style="margin-bottom: 12px; color: var(--text-dark); font-weight: 700; font-size: 18px;">첫 프롬프트</h3>
-                <p style="color: var(--text-medium); margin: 0;">구체적인 질문으로<br>대화를 시작하세요</p>
+                <div class="card-title">첫 프롬프트</div>
+                <div class="card-desc">구체적인 질문으로 대화를 시작하세요</div>
               </div>
             </div>
             
-            <!-- 비서 유형 상세 설명 섹션 추가 -->
             <h2>다양한 AI 비서 유형 알아보기</h2>
             <p>목적과 업무 성격에 맞는 비서를 선택하면 더 효과적인 결과를 얻을 수 있습니다.</p>
             
-            <div class="assistant-cards">
-              <div class="assistant-card">
-                <div class="assistant-icon">🧠</div>
-                <div class="assistant-title">신중한 똑쟁이</div>
-                <div class="assistant-model">GPT-4o 기반</div>
-                <div class="assistant-description">
-                  정확하고 깊이 있는 분석과 고품질 콘텐츠 생성에 탁월합니다. 복잡한 개념을 명확하게 설명하고 전문적인 결과물이 필요할 때 적합합니다.
-                </div>
-                <div class="assistant-tags">
-                  <span class="assistant-tag">정확성</span>
-                  <span class="assistant-tag">복잡한 작업</span>
-                  <span class="assistant-tag">심층 분석</span>
-                </div>
+            <div class="card-grid">
+              <div class="card">
+                <div class="card-icon" style="background: #E8F3FF; color: #4673EB;">🧠</div>
+                <div class="card-title">신중한 똑쟁이</div>
+                <div class="card-subtitle">GPT-4o 기반</div>
+                <div class="card-desc">정확하고 깊이 있는 분석과 고품질 콘텐츠 생성에 탁월합니다. 복잡한 개념을 명확하게 설명하고 전문적인 결과물이 필요할 때 적합합니다.</div>
               </div>
               
-              <div class="assistant-card">
-                <div class="assistant-icon">❤️</div>
-                <div class="assistant-title">따뜻해진 똑쟁이</div>
-                <div class="assistant-model">GPT-4.5o 기반</div>
-                <div class="assistant-description">
-                  최신 GPT-4.5o의 대화, 공감 능력과 정확한 결과물을 결합한 비서입니다. 감성적인 커뮤니케이션과 정확한 정보가 모두 필요할 때 적합합니다.
-                </div>
-                <div class="assistant-tags">
-                  <span class="assistant-tag">균형감</span>
-                  <span class="assistant-tag">공감 능력</span>
-                  <span class="assistant-tag">창의적 작업</span>
-                </div>
+              <div class="card">
+                <div class="card-icon" style="background: #FFF0E6; color: #FF7043;">❤️</div>
+                <div class="card-title">따뜻해진 똑쟁이</div>
+                <div class="card-subtitle">GPT-4.5o 기반</div>
+                <div class="card-desc">최신 GPT-4.5o의 대화, 공감 능력과 정확한 결과물을 결합한 비서입니다. 감성적인 커뮤니케이션과 정확한 정보가 모두 필요할 때 적합합니다.</div>
               </div>
               
-              <div class="assistant-card">
-                <div class="assistant-icon">💬</div>
-                <div class="assistant-title">티키타카 장인</div>
-                <div class="assistant-model">GPT-4o mini 기반</div>
-                <div class="assistant-description">
-                  빠른 응답 속도와 자연스러운 대화가 강점입니다. 간단한 질문, 아이디어 브레인스토밍, 일상적인 업무 보조에 적합하며 신속한 피드백이 필요할 때 효과적입니다.
-                </div>
-                <div class="assistant-tags">
-                  <span class="assistant-tag">속도</span>
-                  <span class="assistant-tag">대화형</span>
-                  <span class="assistant-tag">일상 업무</span>
-                </div>
+              <div class="card">
+                <div class="card-icon" style="background: #F3E8FF; color: #9C27B0;">💬</div>
+                <div class="card-title">티키타카 장인</div>
+                <div class="card-subtitle">GPT-4o mini 기반</div>
+                <div class="card-desc">빠른 응답 속도와 자연스러운 대화가 강점입니다. 간단한 질문, 아이디어 브레인스토밍, 일상적인 업무 보조에 적합하며 신속한 피드백이 필요할 때 효과적입니다.</div>
               </div>
               
-              <div class="assistant-card">
-                <div class="assistant-icon">👓</div>
-                <div class="assistant-title">느림보 어시스턴트</div>
-                <div class="assistant-model">맞춤형 모델</div>
-                <div class="assistant-description">
-                  복잡한 문제에 대해 단계적으로 접근하며 철저하게 사고하는 비서입니다. 심층적인 문제 해결, 논리적 분석, 정교한 계획 수립에 적합합니다.
-                </div>
-                <div class="assistant-tags">
-                  <span class="assistant-tag">단계적 접근</span>
-                  <span class="assistant-tag">논리적 분석</span>
-                  <span class="assistant-tag">철저함</span>
-                </div>
+              <div class="card">
+                <div class="card-icon" style="background: var(--accent-light); color: var(--accent-dark);">👓</div>
+                <div class="card-title">느림보 어시스턴트</div>
+                <div class="card-subtitle">맞춤형 모델</div>
+                <div class="card-desc">복잡한 문제에 대해 단계적으로 접근하며 철저하게 사고하는 비서입니다. 심층적인 문제 해결, 논리적 분석, 정교한 계획 수립에 적합합니다.</div>
               </div>
             </div>
 
-            <div class="section-divider"></div>
+            <div class="divider"></div>
             
             <div class="highlight-box">
-              <strong>기능별 전문 비서도 활용해보세요!</strong>
-              <p style="margin-top: 8px; margin-bottom: 0;">
-                웍스AI는 특정 업무에 특화된 다양한 전문 비서도 제공합니다:
-              </p>
+              <div class="highlight-box-title">기능별 전문 비서도 활용해보세요!</div>
+              <p>웍스AI는 특정 업무에 특화된 다양한 전문 비서도 제공합니다:</p>
               <ul style="margin-top: 12px; margin-bottom: 0;">
                 <li><span class="key-point">보고서/문서 작성:</span> 보고서 초안, 파워포인트 기획, 이메일 작성 등</li>
                 <li><span class="key-point">데이터 분석:</span> 데이터 시각화, 엑셀 함수 추천, SQL 쿼리 작성 등</li>
@@ -1540,11 +1532,9 @@
               </ul>
             </div>
             
-            <div class="tip">
-              <strong>시작 팁</strong>
-              처음에는 간단한 질문부터 시작하고, 조금씩 복잡한 작업을 요청해보세요. 
-              AI와의 대화는 연습이 필요한 새로운 스킬입니다. 
-              첫 시도가 완벽하지 않아도 괜찮습니다. 피드백을 주면서 점차 개선해 나가세요.
+            <div class="tip-box">
+              <div class="tip-title">시작 팁</div>
+              <p>처음에는 간단한 질문부터 시작하고, 조금씩 복잡한 작업을 요청해보세요. AI와의 대화는 연습이 필요한 새로운 스킬입니다. 첫 시도가 완벽하지 않아도 괜찮습니다. 피드백을 주면서 점차 개선해 나가세요.</p>
             </div>
           </div>
         </section>
@@ -1554,9 +1544,9 @@
           <div class="slide-inner">
             <h1>모비데이즈 부서별 AI 활용 방안</h1>
             
-            <div class="team-cards">
-              <div class="team-card">
-                <h4>마케팅팀 (1~5팀)</h4>
+            <div class="card-grid">
+              <div class="card">
+                <div class="card-title">마케팅팀 (1~5팀)</div>
                 <ul>
                   <li>매체별 캠페인 성과 분석 및 인사이트 도출</li>
                   <li>경쟁사 광고 전략 분석 및 벤치마킹</li>
@@ -1567,7 +1557,7 @@
                   <div class="chat-header">추천 프롬프트</div>
                   <div class="chat-messages">
                     <div class="chat-message">
-                      <div class="chat-avatar">나</div>
+                      <div class="chat-avatar user">나</div>
                       <div class="chat-bubble">
                         [광고주명] 앱 설치 캠페인의 지난 달 성과를 분석해줘. 예산 5천만원, 목표 CPI 7,000원이고, 실제 달성 CPI는 6,500원이었어. 매체별 성과는 페이스북 CPI 5,800원, 구글 UAC CPI 7,200원, 틱톡 CPI 6,300원이야. 가장 효율이 좋은 매체와 개선점에 대한 인사이트를 제시해줘.
                       </div>
@@ -1576,8 +1566,8 @@
                 </div>
               </div>
               
-              <div class="team-card">
-                <h4>Creative.Lab</h4>
+              <div class="card">
+                <div class="card-title">Creative.Lab</div>
                 <ul>
                   <li>신규 크리에이티브 콘셉트 및 바리에이션 생성</li>
                   <li>광고 카피 작성 및 다양한 버전 테스트</li>
@@ -1588,7 +1578,7 @@
                   <div class="chat-header">추천 프롬프트</div>
                   <div class="chat-messages">
                     <div class="chat-message">
-                      <div class="chat-avatar">나</div>
+                      <div class="chat-avatar user">나</div>
                       <div class="chat-bubble">
                         [브랜드명]은 20-30대 여성 타겟 화장품 브랜드야. 이번에 신제품 "올데이 래스팅 파운데이션"을 출시하는데, 주요 포인트는 "24시간 지속력"과 "가벼운 사용감"이야. 인스타그램 광고용 카피 5가지 버전을 각각 30자 이내로 제안해줘. 타겟의 소통 방식과 트렌드를 고려해서 작성해줘.
                       </div>
@@ -1597,8 +1587,8 @@
                 </div>
               </div>
               
-              <div class="team-card">
-                <h4>데이터팀</h4>
+              <div class="card">
+                <div class="card-title">데이터팀</div>
                 <ul>
                   <li>대규모 데이터셋 통합 및 파이프라인 구축</li>
                   <li>고급 예측 모델링 및 머신러닝 적용</li>
@@ -1609,7 +1599,7 @@
                   <div class="chat-header">추천 프롬프트</div>
                   <div class="chat-messages">
                     <div class="chat-message">
-                      <div class="chat-avatar">나</div>
+                      <div class="chat-avatar user">나</div>
                       <div class="chat-bubble">
                         [데이터셋 첨부] 지난 6개월간의 사용자 활동 데이터를 분석하여 주요 사용자 세그먼트를 식별해줘. 특히 구매 전환율이 높은 그룹의 특성과 행동 패턴을 심층 분석하고, 이들을 타겟팅하기 위한 기계학습 모델 접근 방식을 제안해줘. 또한 이런 인사이트를 실시간으로 모니터링할 수 있는 대시보드 지표 항목도 추천해줘.
                       </div>
@@ -1618,8 +1608,8 @@
                 </div>
               </div>
               
-              <div class="team-card">
-                <h4>HRBP팀</h4>
+              <div class="card">
+                <div class="card-title">HRBP팀</div>
                 <ul>
                   <li>인터뷰 평가서 작성 및 지원자 분석</li>
                   <li>직무 기술서 및 채용 공고문 작성</li>
@@ -1630,7 +1620,7 @@
                   <div class="chat-header">추천 프롬프트</div>
                   <div class="chat-messages">
                     <div class="chat-message">
-                      <div class="chat-avatar">나</div>
+                      <div class="chat-avatar user">나</div>
                       <div class="chat-bubble">
                         [인터뷰 녹취록 첨부] 이 마케팅 매니저 지원자의 인터뷰 내용을 요약하고, 핵심 역량, 강점, 개선점, 우리 회사 문화와의 적합성 측면에서 분석해줘. 또한 다음 단계 면접에서 더 깊게 물어봐야 할 질문 3가지를 추천해줘.
                       </div>
@@ -1641,17 +1631,17 @@
             </div>
             
             <div class="highlight-box">
-              <strong>지금 바로 시작해보세요!</strong>
-              위 아이디어 중 하나를 선택해 웍스AI와 대화를 시작해보세요. 처음에는 단순한 요청으로 시작하고,
-              점차 맥락과 구체적인 요구사항을 추가하면서 결과물의 질을 향상시켜 보세요.
+              <div class="highlight-box-title">지금 바로 시작해보세요!</div>
+              <p>위 아이디어 중 하나를 선택해 웍스AI와 대화를 시작해보세요. 처음에는 단순한 요청으로 시작하고, 점차 맥락과 구체적인 요구사항을 추가하면서 결과물의 질을 향상시켜 보세요.</p>
             </div>
             
-            <div class="ai-check-tip">
-              <strong>AI 응답 확인 질문</strong>
-              <div class="ai-check-questions">
-                <span class="ai-check-question">"이 정보의 출처는?"</span>
-                <span class="ai-check-question">"이 중 가장 확실한/불확실한 부분은?"</span>
-                <span class="ai-check-question">"어떻게 검증할 수 있을까?"</span>
+            <div style="background: var(--primary-light); border-radius: var(--radius); padding: 24px; margin: 24px 0; position: relative; box-shadow: var(--shadow-sm);">
+              <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--primary); border-radius: var(--radius) 0 0 var(--radius);"></div>
+              <div style="font-weight: 600; color: var(--primary); margin-bottom: 12px;">AI 응답 확인 질문</div>
+              <div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px;">
+                <span style="background: var(--bg); border-radius: var(--radius-sm); padding: 8px 12px; font-style: italic; font-size: 14px; box-shadow: var(--shadow-sm);">"이 정보의 출처는?"</span>
+                <span style="background: var(--bg); border-radius: var(--radius-sm); padding: 8px 12px; font-style: italic; font-size: 14px; box-shadow: var(--shadow-sm);">"이 중 가장 확실한/불확실한 부분은?"</span>
+                <span style="background: var(--bg); border-radius: var(--radius-sm); padding: 8px 12px; font-style: italic; font-size: 14px; box-shadow: var(--shadow-sm);">"어떻게 검증할 수 있을까?"</span>
               </div>
             </div>
           </div>
@@ -1663,9 +1653,9 @@
             <h1>웍스AI 활용 지원 및 평가 계획</h1>
             <p>웍스AI를 효과적으로 활용하고 업무 혁신을 이끌어낼 수 있도록 다양한 지원 프로그램을 준비하고 있습니다.</p>
             
-            <div class="dual-box">
-              <div class="box">
-                <h3>단계별 지원 방향</h3>
+            <div style="display: flex; gap: 16px; margin: 24px 0; flex-wrap: wrap;">
+              <div style="flex: 1; min-width: 250px; background: var(--bg-light); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow-sm);">
+                <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 16px; color: var(--primary);">단계별 지원 방향</h3>
                 <ul>
                   <li>초기: 팀별 소개 및 맞춤형 활용법 안내</li>
                   <li>적용: 실제 업무 적용 지원 및 문제 해결</li>
@@ -1673,8 +1663,8 @@
                   <li>내재화: AI 활용이 일상 업무 프로세스로 정착</li>
                 </ul>
               </div>
-              <div class="box">
-                <h3>주요 지원 프로그램</h3>
+              <div style="flex: 1; min-width: 250px; background: var(--bg-light); border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow-sm);">
+                <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 16px; color: var(--primary);">주요 지원 프로그램</h3>
                 <ul>
                   <li>실시간 질의응답 채널 운영</li>
                   <li>정기적인 활용 팁 및 사례 공유</li>
@@ -1684,18 +1674,17 @@
               </div>
             </div>
             
-            <div class="section-divider"></div>
+            <div class="divider"></div>
             
             <div class="highlight-box">
-              <strong>AI 활용 역량은 평가와 보상에 반영됩니다</strong>
-              웍스AI의 효과적인 활용은 업무 효율성과 창의적 문제 해결에 직결되는 핵심 역량입니다.<br>
-              따라서 AI 활용 역량과 성과는 앞으로의 평가 및 보상 체계에 반영될 예정입니다.
+              <div class="highlight-box-title">AI 활용 역량은 평가와 보상에 반영됩니다</div>
+              <p>웍스AI의 효과적인 활용은 업무 효율성과 창의적 문제 해결에 직결되는 핵심 역량입니다.</p>
+              <p>따라서 AI 활용 역량과 성과는 앞으로의 평가 및 보상 체계에 반영될 예정입니다.</p>
             </div>
             
-            <div class="tip">
-              <strong>질적 활용에 집중하세요</strong>
-              AI 활용 역량은 단순히 AI를 많이 사용하는 것이 아니라, AI를 통해 업무 효율과 품질을 높이고
-              창의적인 솔루션을 개발하는 능력을 의미합니다. 양적 사용보다 질적 활용에 초점을 맞춰 평가될 것입니다.
+            <div class="tip-box">
+              <div class="tip-title">질적 활용에 집중하세요</div>
+              <p>AI 활용 역량은 단순히 AI를 많이 사용하는 것이 아니라, AI를 통해 업무 효율과 품질을 높이고 창의적인 솔루션을 개발하는 능력을 의미합니다. 양적 사용보다 질적 활용에 초점을 맞춰 평가될 것입니다.</p>
             </div>
             
             <p><strong>성과 측정 방식:</strong></p>
@@ -1714,361 +1703,29 @@
             <h1>AI와 함께하는 새로운 시작</h1>
             
             <div class="highlight-box">
-              <strong>AI의 가치는 여러분이 어떻게 활용하느냐에 달려있습니다</strong>
-              AI는 우리의 직무를 대체하는 것이 아니라, 우리가 더 가치 있는 일에 집중할 수 있도록 돕는 도구입니다.<br>
-              웍스AI를 통해 반복적인 업무는 줄이고, 창의적이고 전략적인 업무에 더 많은 시간을 투자해보세요.
+              <div class="highlight-box-title">AI의 가치는 여러분이 어떻게 활용하느냐에 달려있습니다</div>
+              <p>AI는 우리의 직무를 대체하는 것이 아니라, 우리가 더 가치 있는 일에 집중할 수 있도록 돕는 도구입니다.</p>
+              <p>웍스AI를 통해 반복적인 업무는 줄이고, 창의적이고 전략적인 업무에 더 많은 시간을 투자해보세요.</p>
             </div>
             
-            <div style="background: var(--bg); border-radius: var(--radius); box-shadow: var(--shadow-medium); padding: 32px; border: 1px solid var(--border-light); margin-bottom: 32px;">
-              <h2 style="text-align: center; color: var(--text-dark); margin-bottom: 28px; font-weight: 700;">오늘 당장 실행할 3단계</h2>
+            <div style="background: var(--bg); border-radius: var(--radius); box-shadow: var(--shadow); padding: 32px; margin: 32px 0; border: 1px solid var(--border-light);">
+              <h3 style="text-align: center; font-size: 22px; font-weight: 700; color: var(--primary); margin-bottom: 32px;">오늘 당장 실행할 3단계</h3>
               
               <div style="display: flex; justify-content: space-between; align-items: center; gap: 24px; flex-wrap: wrap;">
                 <div style="flex: 1; min-width: 200px; text-align: center;">
-                  <div style="width: 70px; height: 70px; background-color: var(--primary-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 28px; color: var(--primary); font-weight: bold;">1</div>
-                  <h3 style="color: var(--text-dark); margin-bottom: 8px; font-size: 18px; font-weight: 700;">가입하기</h3>
-                  <p style="color: var(--text-medium); font-size: 15px; margin: 0;">초대 메일을 확인하고<br>3분 안에 가입 완료</p>
-                </div>
-                
-                <div style="flex: 1; min-width: 200px; text-align: center;">
-                  <div style="width: 70px; height: 70px; background-color: var(--primary-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 28px; color: var(--primary); font-weight: bold;">2</div>
-                  <h3 style="color: var(--text-dark); margin-bottom: 8px; font-size: 18px; font-weight: 700;">첫 질문하기</h3>
+                  <div style="width: 70px; height: 70px; background: var(--primary-light); color: var(--primary); font-size: 28px; font-weight: 700; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">2</div>
+                  <h4 style="font-size: 18px; font-weight: 700; margin-bottom: 8px; color: var(--text-dark);">첫 질문하기</h4>
                   <p style="color: var(--text-medium); font-size: 15px; margin: 0;">"내일 회의 아젠다를<br>정리해줘" 요청하기</p>
                 </div>
                 
                 <div style="flex: 1; min-width: 200px; text-align: center;">
-                  <div style="width: 70px; height: 70px; background-color: var(--primary-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px; font-size: 28px; color: var(--primary); font-weight: bold;">3</div>
-                  <h3 style="color: var(--text-dark); margin-bottom: 8px; font-size: 18px; font-weight: 700;">경험 공유하기</h3>
+                  <div style="width: 70px; height: 70px; background: var(--primary-light); color: var(--primary); font-size: 28px; font-weight: 700; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">3</div>
+                  <h4 style="font-size: 18px; font-weight: 700; margin-bottom: 8px; color: var(--text-dark);">경험 공유하기</h4>
                   <p style="color: var(--text-medium); font-size: 15px; margin: 0;">팀 슬랙 채널에<br>첫 사용 소감 공유</p>
+                </div>); color: var(--primary); font-size: 28px; font-weight: 700; border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 16px;">1</div>
+                  <h4 style="font-size: 18px; font-weight: 700; margin-bottom: 8px; color: var(--text-dark);">가입하기</h4>
+                  <p style="color: var(--text-medium); font-size: 15px; margin: 0;">초대 메일을 확인하고<br>3분 안에 가입 완료</p>
                 </div>
-              </div>
-            </div>
-            
-            <div style="background: var(--accent-light); border-radius: var(--radius); padding: 24px; display: flex; align-items: center; margin-bottom: 32px; position: relative; overflow: hidden;">
-              <div style="position: absolute; left: 0; top: 0; bottom: 0; width: 4px; background: var(--accent);"></div>
-              <div style="flex: 0 0 50px; height: 50px; background-color: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 20px; font-size: 24px; color: white;">💬</div>
-              <div>
-                <h3 style="color: var(--text-dark); margin-bottom: 6px; font-weight: 700; font-size: 18px;">도움이 필요하신가요?</h3>
-                <p style="margin-bottom: 0; color: var(--text-medium); line-height: 1.5;">
-                  <strong>#웍스ai-사용법</strong> 슬랙 채널에 질문을 남겨주시면 빠르게 답변해 드립니다.<br>
-                  자주 묻는 질문과 활용 팁은 웍스AI 포털 내 가이드 센터에서도 확인하실 수 있습니다.
-                </p>
-              </div>
-            </div>
-          </div>
-        </section>
-      </div>
-
-      <!-- 하단 진행 상태 표시 및 네비게이션 버튼 -->
-      <div class="progress-container">
-        <div class="progress-count" id="progressCount">1 / 9</div>
-        <div class="progress-bar">
-          <div class="progress-fill" id="progressFill" style="width: 11%;"></div>
-        </div>
-        <div class="progress-buttons">
-          <button class="nav-button secondary" id="prevButton" onclick="prevSlide()" disabled>
-            <svg class="nav-button-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>
-            이전
-          </button>
-          <button class="nav-button primary" id="nextButton" onclick="nextSlide()">
-            다음
-            <svg class="nav-button-icon" style="margin: 0 0 0 6px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
-          </button>
-        </div>
-      </div>
-    </main>
-  </div>
-
-  <!-- 토스트 메시지 컨테이너 -->
-  <div class="toast-container" id="toastContainer"></div>
-
-  <!-- 자바스크립트 -->
-  <script>
-    // 전역 변수
-    let currentSlideIndex = 0;
-    const totalSlides = 9; // 총 슬라이드 수
-    let sidebarCollapsed = false;
-    let sidebarHidden = window.innerWidth <= 768; // 모바일에서 시작 시 사이드바 숨김
-    
-    // DOM 요소 가져오기
-    const sidebar = document.getElementById('sidebar');
-    const mainContent = document.getElementById('mainContent');
-    const header = document.getElementById('header');
-    const sidebarToggle = document.getElementById('sidebarToggle');
-    const sidebarCollapseBtn = document.getElementById('sidebarCollapseBtn');
-    const prevButton = document.getElementById('prevButton');
-    const nextButton = document.getElementById('nextButton');
-    const progressFill = document.getElementById('progressFill');
-    const progressCount = document.getElementById('progressCount');
-    const searchInput = document.getElementById('searchInput');
-    const searchClear = document.getElementById('searchClear');
-    const tocLinks = document.querySelectorAll('.toc-link');
-    
-    // 문서 로드 완료 시 실행
-    document.addEventListener('DOMContentLoaded', function() {
-      // 모바일 환경에서 사이드바 초기 상태 설정
-      if (window.innerWidth <= 768) {
-        mainContent.classList.add('sidebar-hidden');
-        header.classList.add('sidebar-hidden');
-      }
-      
-      // 이벤트 리스너 설정
-      setupEventListeners();
-      
-      // 검색 기능 초기화
-      initSearch();
-    });
-    
-    // 이벤트 리스너 설정
-    function setupEventListeners() {
-      // 사이드바 토글 버튼 (모바일)
-      sidebarToggle.addEventListener('click', toggleSidebar);
-      
-      // 사이드바 축소 버튼
-      sidebarCollapseBtn.addEventListener('click', toggleSidebarCollapse);
-      
-      // 검색 클리어 버튼
-      searchClear.addEventListener('click', clearSearch);
-      
-      // 검색 입력 시 엔터 키 처리
-      searchInput.addEventListener('keydown', function(e) {
-        if (e.key === 'Enter') {
-          searchSlides();
-        }
-      });
-      
-      // 창 크기 변경 시 처리
-      window.addEventListener('resize', handleResize);
-      
-      // 키보드 이벤트 처리
-      document.addEventListener('keydown', handleKeyPress);
-    }
-    
-    // 검색 기능 초기화
-    function initSearch() {
-      // 검색 입력 필드 포커스 시 자동 선택
-      searchInput.addEventListener('focus', function() {
-        this.select();
-      });
-    }
-    
-    // 사이드바 토글 (모바일)
-    function toggleSidebar() {
-      sidebarHidden = !sidebarHidden;
-      
-      sidebar.classList.toggle('sidebar-hidden', sidebarHidden);
-      mainContent.classList.toggle('sidebar-hidden', sidebarHidden);
-      header.classList.toggle('sidebar-hidden', sidebarHidden);
-      
-      // 토글 버튼 아이콘 변경
-      sidebarToggle.classList.toggle('open', !sidebarHidden);
-    }
-    
-    // 사이드바 축소/확장 (데스크탑)
-    function toggleSidebarCollapse() {
-      sidebarCollapsed = !sidebarCollapsed;
-      
-      sidebar.classList.toggle('sidebar-collapsed', sidebarCollapsed);
-      mainContent.classList.toggle('sidebar-collapsed', sidebarCollapsed);
-      header.classList.toggle('sidebar-collapsed', sidebarCollapsed);
-      
-      // 축소 버튼 아이콘 변경
-      sidebarCollapseBtn.innerHTML = sidebarCollapsed 
-        ? '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>' 
-        : '<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m15 18-6-6 6-6"/></svg>';
-    }
-    
-    // 창 크기 변경 시 처리
-    function handleResize() {
-      // 모바일에서 데스크톱으로 전환 시 사이드바 표시
-      if (window.innerWidth > 768 && sidebarHidden) {
-        sidebarHidden = false;
-        sidebar.classList.remove('sidebar-hidden');
-        mainContent.classList.remove('sidebar-hidden');
-        header.classList.remove('sidebar-hidden');
-      }
-    }
-    
-    // 키보드 이벤트 처리
-    function handleKeyPress(e) {
-      if (e.key === 'ArrowRight' || e.key === 'ArrowDown') {
-        // 다음 슬라이드
-        if (currentSlideIndex < totalSlides - 1) {
-          nextSlide();
-        }
-      } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') {
-        // 이전 슬라이드
-        if (currentSlideIndex > 0) {
-          prevSlide();
-        }
-      } else if (e.key === 'Home') {
-        // 첫 슬라이드로 이동
-        goToSlide(0);
-      } else if (e.key === 'End') {
-        // 마지막 슬라이드로 이동
-        goToSlide(totalSlides - 1);
-      } else if (e.key === 'f' && e.ctrlKey) {
-        // 검색 필드에 포커스 (Ctrl+F)
-        e.preventDefault();
-        searchInput.focus();
-      }
-    }
-    
-    // 다음 슬라이드로 이동
-    function nextSlide() {
-      if (currentSlideIndex < totalSlides - 1) {
-        goToSlide(currentSlideIndex + 1);
-      }
-    }
-    
-    // 이전 슬라이드로 이동
-    function prevSlide() {
-      if (currentSlideIndex > 0) {
-        goToSlide(currentSlideIndex - 1);
-      }
-    }
-    
-    // 특정 슬라이드로 이동
-    function goToSlide(index) {
-      // 모든 슬라이드 비활성화
-      const slides = document.querySelectorAll('.slide');
-      slides.forEach(slide => {
-        slide.classList.remove('active');
-      });
-      
-      // 선택한 슬라이드 활성화
-      const activeSlide = document.getElementById('slide' + index);
-      if (activeSlide) {
-        activeSlide.classList.add('active');
-        
-        // 슬라이드 스크롤 위치 초기화
-        activeSlide.scrollTop = 0;
-      }
-      
-      // 현재 슬라이드 인덱스 업데이트
-      currentSlideIndex = index;
-      
-      // 네비게이션 버튼 상태 업데이트
-      updateNavButtons();
-      
-      // 프로그레스 바 업데이트
-      updateProgress();
-      
-      // 사이드바 메뉴 활성 상태 업데이트
-      updateTocActive();
-      
-      // 모바일에서는 슬라이드 변경 시 사이드바 숨기기
-      if (window.innerWidth <= 768 && !sidebarHidden) {
-        toggleSidebar();
-      }
-    }
-    
-    // 네비게이션 버튼 상태 업데이트
-    function updateNavButtons() {
-      // 이전 버튼 (첫 슬라이드에서 비활성화)
-      prevButton.disabled = currentSlideIndex === 0;
-      
-      // 다음 버튼 (마지막 슬라이드에서 텍스트 변경)
-      if (currentSlideIndex === totalSlides - 1) {
-        nextButton.innerHTML = '<svg class="nav-button-icon" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12h18M3 6h18M3 18h18"/></svg> 처음으로';
-        nextButton.onclick = function() { goToSlide(0); };
-      } else {
-        nextButton.innerHTML = '다음 <svg class="nav-button-icon" style="margin: 0 0 0 6px;" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>';
-        nextButton.onclick = nextSlide;
-      }
-    }
-    
-    // 프로그레스 바 업데이트
-    function updateProgress() {
-      const percent = (currentSlideIndex / (totalSlides - 1)) * 100;
-      progressFill.style.width = percent + '%';
-      progressCount.textContent = (currentSlideIndex + 1) + ' / ' + totalSlides;
-    }
-    
-    // 사이드바 메뉴 활성 상태 업데이트
-    function updateTocActive() {
-      // 모든 메뉴 항목 비활성화
-      tocLinks.forEach(link => {
-        link.classList.remove('active');
-      });
-      
-      // 현재 슬라이드에 해당하는 메뉴 항목 활성화
-      const activeLink = document.querySelector(`.toc-link:nth-child(${currentSlideIndex + 1})`);
-      if (activeLink) {
-        activeLink.classList.add('active');
-      }
-    }
-    
-    // 검색 기능
-    function searchSlides() {
-      const keyword = searchInput.value.trim().toLowerCase();
-      
-      if (!keyword) {
-        showToast('검색어를 입력해주세요.', 'error');
-        return;
-      }
-      
-      let foundSlides = [];
-      
-      // 모든 슬라이드에서 키워드 검색
-      const slides = document.querySelectorAll('.slide');
-      slides.forEach((slide, index) => {
-        const slideContent = slide.textContent.toLowerCase();
-        
-        if (slideContent.includes(keyword)) {
-          foundSlides.push(index);
-        }
-      });
-      
-      if (foundSlides.length > 0) {
-        // 첫 번째 일치하는 슬라이드로 이동
-        goToSlide(foundSlides[0]);
-        
-        // 검색 결과 표시
-        showToast(`"${keyword}" 검색 결과: ${foundSlides.length}개의 슬라이드에서 발견됨`, 'success');
-      } else {
-        showToast(`"${keyword}"에 대한 검색 결과가 없습니다.`, 'error');
-      }
-    }
-    
-    // 검색 입력 지우기
-    function clearSearch() {
-      searchInput.value = '';
-      searchInput.focus();
-    }
-    
-    // 토스트 메시지 표시
-    function showToast(message, type = '') {
-      const toastContainer = document.getElementById('toastContainer');
-      
-      // 토스트 메시지 생성
-      const toast = document.createElement('div');
-      toast.className = 'toast';
-      toast.textContent = message;
-      
-      // 타입에 따른 스타일 적용
-      if (type === 'success') {
-        toast.classList.add('success');
-      } else if (type === 'error') {
-        toast.classList.add('error');
-      }
-      
-      // 토스트 메시지 추가
-      toastContainer.appendChild(toast);
-      
-      // 토스트 메시지 표시 애니메이션
-      setTimeout(() => {
-        toast.classList.add('show');
-      }, 10);
-      
-      // 토스트 메시지 자동 제거
-      setTimeout(() => {
-        toast.classList.remove('show');
-        
-        setTimeout(() => {
-          toast.remove();
-        }, 300);
-      }, 3000);
-    }
-  </script>
-</body>
-</html>
+                
+                <div style="flex: 1; min-width: 200px; text-align: center;">
+                  <div style="width: 70px; height: 70px; background: var(--primary-light
