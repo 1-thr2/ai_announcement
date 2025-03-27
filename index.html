@@ -61,6 +61,538 @@
     body {
       background: var(--bg);
       color: var(--text-dark);
+      overflow-x: hidden;
+      line-height: 1.6;
+      letter-spacing: -0.3px;
+    }
+
+    /* 레이아웃 */
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 32px 20px;
+    }
+
+    /* 헤더 */
+    .header {
+      background: var(--bg);
+      border-bottom: 1px solid var(--border-light);
+      padding: 16px 0;
+      margin-bottom: 32px;
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    .header-logo {
+      display: flex;
+      align-items: center;
+    }
+
+    .header-logo-img {
+      height: 32px;
+    }
+
+    .header-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-left: 12px;
+    }
+
+    /* 목차 카드 */
+    .toc-card {
+      background: var(--bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      margin-bottom: 32px;
+      overflow: hidden;
+      border: 1px solid var(--border-light);
+    }
+
+    .toc-header {
+      background: var(--primary);
+      color: white;
+      padding: 16px 24px;
+      font-size: 18px;
+      font-weight: 700;
+    }
+
+    .toc-list {
+      list-style: none;
+      padding: 16px 0;
+    }
+
+    .toc-item {
+      padding: 8px 24px;
+    }
+
+    .toc-link {
+      display: flex;
+      align-items: center;
+      color: var(--text-medium);
+      text-decoration: none;
+      padding: 8px 0;
+      font-weight: 500;
+      transition: color var(--transition);
+    }
+
+    .toc-link:hover {
+      color: var(--primary);
+    }
+
+    .toc-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 28px;
+      height: 28px;
+      background: var(--primary-light);
+      color: var(--primary);
+      border-radius: 50%;
+      margin-right: 12px;
+      font-weight: 600;
+      font-size: 14px;
+    }
+
+    .toc-desc {
+      font-size: 14px;
+      color: var(--text-light);
+      margin-top: 4px;
+      margin-left: 40px;
+    }
+
+    /* 콘텐츠 */
+    .content-card {
+      background: var(--bg);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 32px;
+      margin-bottom: 32px;
+      border: 1px solid var(--border-light);
+    }
+
+    /* 네비게이션 */
+    .nav-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 32px;
+    }
+
+    .nav-button {
+      display: inline-flex;
+      align-items: center;
+      padding: 10px 16px;
+      background: var(--primary);
+      color: white;
+      border-radius: var(--radius-sm);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 14px;
+      transition: background var(--transition);
+    }
+
+    .nav-button:hover {
+      background: var(--primary-dark);
+    }
+
+    .nav-button-prev {
+      background: var(--bg-light);
+      color: var(--text-medium);
+    }
+
+    .nav-button-prev:hover {
+      background: var(--border-light);
+    }
+
+    .nav-icon {
+      width: 16px;
+      height: 16px;
+    }
+
+    .nav-icon-left {
+      margin-right: 8px;
+    }
+
+    .nav-icon-right {
+      margin-left: 8px;
+    }
+
+    /* 텍스트 스타일 */
+    h1 {
+      font-size: 32px;
+      font-weight: 700;
+      color: var(--text-dark);
+      margin-bottom: 16px;
+      line-height: 1.3;
+    }
+    
+    h2 {
+      font-size: 20px;
+      font-weight: 600;
+      color: var(--text-medium);
+      margin-bottom: 20px;
+      line-height: 1.4;
+    }
+    
+    p {
+      font-size: 16px;
+      line-height: 1.7;
+      color: var(--text-dark);
+      margin-bottom: 16px;
+    }
+    
+    .key-point {
+      font-weight: 600;
+      color: var(--primary);
+    }
+    
+    .highlight-text {
+      background: var(--accent-light);
+      padding: 0 2px;
+      border-radius: 2px;
+    }
+    
+    .divider {
+      height: 1px;
+      background: var(--border-light);
+      margin: 24px 0;
+      width: 100%;
+    }
+    
+    /* 하이라이트 박스 */
+    .highlight-box {
+      background: var(--primary-light);
+      border-radius: var(--radius);
+      padding: 24px;
+      margin-bottom: 24px;
+      position: relative;
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .highlight-box::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      width: 4px;
+      background: var(--primary);
+      border-radius: var(--radius) 0 0 var(--radius);
+    }
+    
+    .highlight-box-title {
+      font-size: 16px;
+      font-weight: 600;
+      color: var(--primary);
+      margin-bottom: 12px;
+    }
+
+    /* 메트릭 박스 */
+    .metrics {
+      display: flex;
+      gap: 16px;
+      margin: 24px 0;
+    }
+    
+    .metric-box {
+      flex: 1;
+      background: var(--bg);
+      border-radius: var(--radius);
+      padding: 20px;
+      text-align: center;
+      border: 1px solid var(--border-light);
+      transition: transform var(--transition), box-shadow var(--transition);
+      box-shadow: var(--shadow-sm);
+    }
+    
+    .metric-box:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow);
+    }
+    
+    .metric-value {
+      font-size: 36px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 8px;
+    }
+    
+    .metric-label {
+      font-size: 14px;
+      color: var(--text-medium);
+      font-weight: 500;
+    }
+
+    /* 리스트 */
+    ul {
+      list-style: none;
+      margin: 0 0 20px 0;
+    }
+    
+    ul li {
+      padding-left: 24px;
+      position: relative;
+      margin-bottom: 12px;
+      font-size: 16px;
+    }
+    
+    ul li::before {
+      content: '';
+      position: absolute;
+      left: 6px;
+      top: 10px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--primary);
+    }
+    
+    ul.highlight li::before {
+      background: var(--accent);
+    }
+    
+    ul li.highlighted {
+      background: var(--primary-light);
+      border-radius: var(--radius-sm);
+      padding: 12px 24px;
+    }
+
+    /* 반응형 */
+    @media (max-width: 768px) {
+      .metrics {
+        flex-direction: column;
+      }
+      
+      h1 {
+        font-size: 26px;
+      }
+      
+      h2 {
+        font-size: 18px;
+      }
+      
+      .container {
+        padding: 24px 16px;
+      }
+      
+      .content-card {
+        padding: 24px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- 헤더 -->
+  <header class="header">
+    <div class="header-inner">
+      <a href="index.html" class="header-logo">
+        <img src="Logo.png" alt="모비데이즈 로고" class="header-logo-img">
+        <div class="header-title">웍스AI 가이드</div>
+      </a>
+    </div>
+  </header>
+
+  <!-- 메인 콘텐츠 -->
+  <div class="container">
+    <!-- 목차 카드 -->
+    <div class="toc-card">
+      <div class="toc-header">
+        웍스AI로 일하는 방식의 혁신 - 목차
+      </div>
+      <ul class="toc-list">
+        <li class="toc-item">
+          <a href="#" class="toc-link">
+            <div class="toc-number">1</div>
+            <div class="toc-content">
+              <div class="toc-title">AI 시대의 새로운 일하는 방식</div>
+            </div>
+          </a>
+          <div class="toc-desc">업무 효율 30% 향상하기</div>
+        </li>
+        <li class="toc-item">
+          <a href="page2.html" class="toc-link">
+            <div class="toc-number">2</div>
+            <div class="toc-content">
+              <div class="toc-title">AI 시대의 역량 재정의</div>
+            </div>
+          </a>
+          <div class="toc-desc">AI 시대에 필요한 핵심 스킬</div>
+        </li>
+        <li class="toc-item">
+          <a href="page3.html" class="toc-link">
+            <div class="toc-number">3</div>
+            <div class="toc-content">
+              <div class="toc-title">AI 활용의 현실적 격차</div>
+            </div>
+          </a>
+          <div class="toc-desc">AI 활용 vs 미활용 비교</div>
+        </li>
+        <li class="toc-item">
+          <a href="page4.html" class="toc-link">
+            <div class="toc-number">4</div>
+            <div class="toc-content">
+              <div class="toc-title">웍스AI 활용 사례와 프롬프트</div>
+            </div>
+          </a>
+          <div class="toc-desc">실무에 바로 적용 가능한 예시</div>
+        </li>
+        <li class="toc-item">
+          <a href="page5.html" class="toc-link">
+            <div class="toc-number">5</div>
+            <div class="toc-content">
+              <div class="toc-title">웍스AI를 제대로 활용하기</div>
+            </div>
+          </a>
+          <div class="toc-desc">프롬프트 작성 5가지 원칙</div>
+        </li>
+        <li class="toc-item">
+          <a href="page6.html" class="toc-link">
+            <div class="toc-number">6</div>
+            <div class="toc-content">
+              <div class="toc-title">웍스AI 시작하기</div>
+            </div>
+          </a>
+          <div class="toc-desc">회원가입부터 첫 질문까지</div>
+        </li>
+        <li class="toc-item">
+          <a href="page7.html" class="toc-link">
+            <div class="toc-number">7</div>
+            <div class="toc-content">
+              <div class="toc-title">모비데이즈 부서별 AI 활용 방안</div>
+            </div>
+          </a>
+          <div class="toc-desc">팀별 맞춤 활용 가이드</div>
+        </li>
+        <li class="toc-item">
+          <a href="page8.html" class="toc-link">
+            <div class="toc-number">8</div>
+            <div class="toc-content">
+              <div class="toc-title">웍스AI 활용 지원 및 평가 계획</div>
+            </div>
+          </a>
+          <div class="toc-desc">AI 역량에 따른 성과 평가</div>
+        </li>
+        <li class="toc-item">
+          <a href="page9.html" class="toc-link">
+            <div class="toc-number">9</div>
+            <div class="toc-content">
+              <div class="toc-title">AI와 함께하는 새로운 시작</div>
+            </div>
+          </a>
+          <div class="toc-desc">바로 실행할 수 있는 3단계</div>
+        </li>
+      </ul>
+    </div>
+
+    <!-- 콘텐츠 카드 - 첫 번째 페이지 -->
+    <div class="content-card">
+      <h1>AI 시대의 새로운 일하는 방식</h1>
+      <h2>왜 지금 AI를 써야 하며, 어떻게 나의 역량을 확장시킬 수 있을까요?</h2>
+
+      <div class="highlight-box">
+        <div class="highlight-box-title">전 세계 마케팅 전문가들이 이미 AI로 일상 업무의 30%를 자동화하고 있습니다</div>
+        <p>지금 우리는 AI가 업무 방식을 완전히 재정의하는 시대를 살고 있습니다.</p>
+        <p>이 가이드에서는 AI가 우리의 일상 업무를 어떻게 바꿀 수 있는지, 그리고 '웍스AI'를 어떻게 활용하면 더 창의적이고 효율적으로 일할 수 있는지 함께 알아보겠습니다.</p>
+      </div>
+      
+      <div class="metrics">
+        <div class="metric-box">
+          <div class="metric-value">30%</div>
+          <div class="metric-label">업무 시간 단축</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-value">240+</div>
+          <div class="metric-label">연간 절약 시간</div>
+        </div>
+        <div class="metric-box">
+          <div class="metric-value">2-3x</div>
+          <div class="metric-label">아이디어 발굴 속도</div>
+        </div>
+      </div>
+
+      <p>여러분이 자문해볼 질문들:</p>
+      <ul class="highlight">
+        <li class="highlighted">내 업무 시간을 하루에 1-2시간 이상 절약할 수 있다면?</li>
+        <li class="highlighted">반복적인 작업 대신 진짜 중요한 일에 집중할 수 있다면?</li>
+        <li class="highlighted">창의적인 아이디어를 2-3배 더 빠르게 발전시킬 수 있다면?</li>
+        <li class="highlighted">내 전문성을 10배 더 효과적으로 활용할 수 있다면?</li>
+      </ul>
+
+      <p>이 모든 것이 오늘부터 <span class="key-point">웍스AI</span>로 가능합니다.</p>
+
+      <!-- 네비게이션 버튼 -->
+      <div class="nav-buttons">
+        <div></div> <!-- 왼쪽 버튼이 없을 때 공간 유지용 -->
+        <a href="page2.html" class="nav-button">
+          다음
+          <svg class="nav-icon nav-icon-right" xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m9 18 6-6-6-6"/></svg>
+        </a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
+  <style>
+    :root {
+      /* 모비데이즈 브랜드 컬러 */
+      --primary: #4673EB;      /* 파란색 */
+      --primary-light: #E8F3FF;
+      --primary-dark: #3A62D7;
+      --accent: #F7D540;       /* 노란색 */
+      --accent-light: #FFF9DB;
+      --accent-dark: #E3B800;
+      
+      /* 기본 UI 컬러 */
+      --bg: #ffffff;
+      --bg-light: #f9fafb;
+      --bg-dark: #f0f3f9;
+      --text-dark: #191F28;
+      --text-medium: #4E5968;
+      --text-light: #8B95A1;
+      --border: #D7E2EB;
+      --border-light: #EAF0F6;
+      --error: #F24147;
+      --success: #00C853;
+      
+      /* 그림자 */
+      --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+      --shadow: 0 2px 6px rgba(0,0,0,0.06);
+      --shadow-lg: 0 4px 12px rgba(0,0,0,0.08);
+      
+      /* 라운드 */
+      --radius-sm: 6px;
+      --radius: 12px;
+      --radius-lg: 16px;
+      
+      /* 레이아웃 */
+      --header-height: 64px;
+      --sidebar-width: 280px;
+      --sidebar-collapsed-width: 80px;
+      
+      /* 애니메이션 */
+      --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      margin: 0; 
+      padding: 0; 
+      box-sizing: border-box;
+      font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
+    }
+
+    html, body {
+      height: 100%;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text-dark);
       overflow: hidden;
       line-height: 1.6;
       letter-spacing: -0.3px;
