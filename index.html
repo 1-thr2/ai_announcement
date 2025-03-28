@@ -4,1238 +4,1570 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>웍스AI 전사 도입 안내</title>
-  <!-- Pretendard 폰트 -->
-  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/variable/pretendardvariable.css" />
+  <!-- 폰트: Noto Sans KR -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link 
+    href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap"
+    rel="stylesheet"
+  >
   <style>
     :root {
-      /* 모비데이즈 브랜드 컬러 유지 */
-      --primary: #4673EB;      /* 모비데이즈 파란색 */
-      --primary-light: #E8F3FF;
+      /* 컬러 팔레트 */
+      --primary: #4673EB;
+      --primary-light: #F3F4FF;
       --primary-dark: #3A62D7;
-      --accent: #F7D540;       /* 모비데이즈 노란색 */
+      --accent: #F7D540;
       --accent-light: #FFF9DB;
       --accent-dark: #E3B800;
-      
-      /* 토스 스타일 UI 컬러 체계 */
-      --bg: #ffffff;
-      --bg-light: #f9fafb;
+      --secondary: #00C853;
+      --secondary-light: #E2F7ED;
+      --bg: #f9fafc;
+      --bg-gradient: linear-gradient(135deg, #f9fafc 0%, #EDF1F7 100%);
+      --white: #ffffff;
       --text-dark: #191F28;
-      --text-medium: #4E5968;
-      --text-light: #8B95A1;
-      --border: #D7E2EB;
-      --border-light: #EAF0F6;
-      --error: #F24147;
-      --success: #00C853;
-      
-      /* 그림자 */
-      --shadow-sm: 0 1px 3px rgba(0,0,0,0.04);
+      --text-medium: #4a5568;
+      --text-light: #5D6976;
+      --radius: 10px;
+      --shadow-light: 0 1px 3px rgba(0,0,0,0.08);
       --shadow: 0 2px 6px rgba(0,0,0,0.06);
-      --shadow-lg: 0 4px 12px rgba(0,0,0,0.08);
       
-      /* 라운드 */
-      --radius-xs: 4px;
-      --radius-sm: 6px;
-      --radius: 12px;
-      --radius-lg: 16px;
-      
-      /* 레이아웃 */
-      --header-height: 64px;
-      --sidebar-width: 280px;
-      --sidebar-collapsed-width: 80px;
-      
-      /* 애니메이션 */
-      --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+      /* 여백 시스템 */
+      --space-xs: 8px;
+      --space-sm: 16px;
+      --space-md: 24px;
+      --space-lg: 32px;
+      --space-xl: 40px;
     }
 
     * {
       margin: 0; 
       padding: 0; 
       box-sizing: border-box;
-      font-family: 'Pretendard Variable', -apple-system, BlinkMacSystemFont, system-ui, Roboto, sans-serif;
-    }
-
-    html, body {
-      height: 100%;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
+      font-family: 'Noto Sans KR', sans-serif;
     }
 
     body {
-      background: var(--bg);
+      background: var(--bg-gradient);
       color: var(--text-dark);
       overflow: hidden;
       line-height: 1.6;
-      letter-spacing: -0.3px;
     }
 
-    /* 레이아웃 */
-    .app-container {
-      display: flex;
-      height: 100vh;
-    }
-
-    /* 헤더 */
-    .header {
-      height: var(--header-height);
-      padding: 0 24px;
-      background: var(--bg);
-      display: flex;
-      align-items: center;
+    /* 상단 고정 헤더 */
+    header {
       position: fixed;
       top: 0;
-      right: 0;
-      left: var(--sidebar-width);
-      z-index: 99;
-      border-bottom: 1px solid var(--border-light);
-      transition: left var(--transition);
-    }
-    
-    .header.sidebar-collapsed {
-      left: var(--sidebar-collapsed-width);
-    }
-    
-    .header.sidebar-hidden {
       left: 0;
-    }
-    
-    .header-logo-area {
+      right: 0;
+      height: 64px;
+      background-color: var(--white);
       display: flex;
       align-items: center;
+      padding: 0 var(--space-md);
+      box-shadow: var(--shadow-light);
+      border-bottom: 1px solid rgba(0,0,0,0.06);
+      z-index: 999;
     }
-    
+    header img {
+      height: 40px;
+      margin-right: var(--space-sm);
+    }
     .header-title {
       font-size: 18px;
       font-weight: 700;
       color: var(--primary);
-      margin-left: 12px;
-    }
-    
-    .header-logo {
-      height: 32px;
     }
 
-    /* 모바일 사이드바 토글 버튼 */
-    .sidebar-toggle {
-      width: 40px;
-      height: 40px;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      margin-right: 16px;
-      border-radius: 50%;
-      border: 1px solid var(--border-light);
-      background: var(--bg);
-      cursor: pointer;
-    }
-
-    /* 진행 상태 표시 바 */
-    .progress-indicator {
+    /* 진행 바 */
+    .progress-bar {
       position: fixed;
-      top: var(--header-height);
-      left: var(--sidebar-width);
-      right: 0;
-      height: 4px;
-      background: var(--border-light);
-      z-index: 98;
-      transition: left var(--transition);
-    }
-    
-    .progress-indicator.sidebar-collapsed {
-      left: var(--sidebar-collapsed-width);
-    }
-    
-    .progress-indicator.sidebar-hidden {
+      top: 64px;
       left: 0;
-    }
-    
-    .progress-fill {
-      height: 100%;
-      background: var(--primary);
-      width: 0%;
-      transition: width var(--transition);
-    }
-    
-    /* 검색 */
-    .search-container {
-      position: relative;
-      width: 320px;
-      margin-left: auto;
-    }
-    
-    .search-input {
       width: 100%;
-      height: 44px;
-      padding: 0 44px 0 16px;
-      border-radius: 8px;
-      border: 1px solid var(--border);
-      background: var(--bg-light);
-      font-size: 15px;
-      color: var(--text-dark);
-      transition: all var(--transition);
+      height: 4px;
+      background-color: #e5e5e5;
+      z-index: 998;
     }
-    
-    .search-input:focus {
-      outline: none;
-      border-color: var(--primary);
-      box-shadow: 0 0 0 3px rgba(70, 115, 235, 0.12);
-      background: var(--bg);
+    .progress {
+      height: 4px;
+      background-color: var(--primary);
+      width: 0%;
+      transition: width 0.3s ease;
     }
-    
-    .search-input::placeholder {
-      color: var(--text-light);
+
+    /* 단계 카운터 */
+    .step-counter {
+      position: fixed;
+      top: 72px;
+      right: var(--space-md);
+      font-size: 16px;
+      color: var(--primary);
+      font-weight: 500;
+      z-index: 999;
     }
-    
-    .search-icon {
-      position: absolute;
-      right: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 20px;
-      height: 20px;
-      color: var(--text-light);
+
+    /* 컨테이너 (슬라이드 영역) */
+    .container {
+      margin-top: 64px; 
+      height: calc(100vh - 64px);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 0 var(--space-md);
+    }
+    .card {
+      background: linear-gradient(165deg, var(--white) 0%, #f8fafd 100%);
+      box-shadow: var(--shadow-light);
+      border: 1px solid rgba(0,0,0,0.06);
+      border-radius: var(--radius);
+      padding: var(--space-xl);
+      max-width: 1200px;
+      width: 100%;
+      transition: 0.3s ease;
+      position: relative;
+      overflow: auto;
+      max-height: 90vh;
+    }
+    .card.hidden {
+      opacity: 0;
+      transform: translateX(40px);
       pointer-events: none;
     }
-    
-    .search-clear {
-      position: absolute;
-      right: 14px;
-      top: 50%;
-      transform: translateY(-50%);
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: var(--text-light);
-      color: white;
-      font-size: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      opacity: 0;
-      transition: opacity var(--transition);
-    }
-    
-    .search-input:valid ~ .search-clear {
+    .card.visible {
       opacity: 1;
-    }
-    
-    /* 검색 제안 */
-    .search-suggestions {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      width: 100%;
-      background: var(--bg);
-      border-radius: 0 0 var(--radius) var(--radius);
-      border: 1px solid var(--border);
-      border-top: none;
-      padding: 8px 0;
-      box-shadow: var(--shadow);
-      z-index: 10;
-      display: none;
-      margin-top: 4px;
-      overflow: hidden;
-    }
-    
-    .search-input:focus ~ .search-suggestions {
-      display: block;
-    }
-    
-    .suggestion-title {
-      padding: 8px 16px;
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-light);
-    }
-    
-    .suggestion-item {
-      padding: 12px 16px;
-      font-size: 14px;
-      color: var(--text-medium);
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      transition: background var(--transition);
-    }
-    
-    .suggestion-item:hover {
-      background: var(--bg-light);
-    }
-    
-    .suggestion-icon {
-      width: 16px;
-      height: 16px;
-      margin-right: 12px;
-      color: var(--text-light);
-      flex-shrink: 0;
+      transform: translateX(0);
     }
 
-    .suggestion-recent {
-      color: var(--text-light);
-      font-size: 12px;
-      margin-left: auto;
+    /* 스크롤바 스타일 */
+    .card::-webkit-scrollbar {
+      width: 8px;
     }
-
-    /* 사이드바 */
-    .sidebar {
-      width: var(--sidebar-width);
-      height: 100vh;
-      position: fixed;
-      left: 0;
-      top: 0;
-      background: var(--bg);
-      border-right: 1px solid var(--border-light);
-      z-index: 100;
-      transition: transform var(--transition), width var(--transition);
-      display: flex;
-      flex-direction: column;
+    .card::-webkit-scrollbar-track {
+      background: #f1f1f1;
+      border-radius: 4px;
     }
-    
-    .sidebar-header {
-      height: var(--header-height);
-      padding: 0 16px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      border-bottom: 1px solid var(--border-light);
+    .card::-webkit-scrollbar-thumb {
+      background: #d1d5db;
+      border-radius: 4px;
     }
-    
-    .sidebar-header-title {
-      font-size: 16px;
-      font-weight: 700;
-      color: var(--text-dark);
-    }
-    
-    .sidebar-collapse-btn {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      background: var(--bg-light);
-      border: none;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      color: var(--text-medium);
-      transition: background var(--transition);
-    }
-    
-    .sidebar-collapse-btn:hover {
-      background: var(--border-light);
-    }
-    
-    .sidebar-content {
-      flex: 1;
-      overflow-y: auto;
-      padding: 16px 0;
-      transition: padding var(--transition);
-    }
-    
-    .sidebar-content::-webkit-scrollbar {
-      width: 6px;
-    }
-    
-    .sidebar-content::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    
-    .sidebar-content::-webkit-scrollbar-thumb {
-      background-color: var(--border);
-      border-radius: 3px;
-    }
-    
-    .sidebar-collapsed {
-      width: var(--sidebar-collapsed-width);
-    }
-    
-    .sidebar-collapsed .sidebar-content {
-      padding: 16px 0;
-    }
-    
-    .sidebar-hidden {
-      transform: translateX(-100%);
-    }
-
-    /* 목차 섹션 */
-    .toc-section {
-      margin-bottom: 24px;
-      padding: 0 12px;
-    }
-    
-    .toc-section-title {
-      font-size: 13px;
-      font-weight: 600;
-      color: var(--text-light);
-      padding: 8px 12px;
-      margin-bottom: 4px;
-      transition: opacity var(--transition);
-    }
-    
-    .sidebar-collapsed .toc-section-title {
-      opacity: 0;
-      height: 0;
-      padding: 0;
-      margin: 0;
-      overflow: hidden;
-    }
-    
-    .toc-list {
-      list-style: none;
-    }
-    
-    .toc-item {
-      margin-bottom: 2px;
-    }
-    
-    .toc-link {
-      display: flex;
-      align-items: center;
-      padding: 12px;
-      border-radius: var(--radius-sm);
-      cursor: pointer;
-      transition: all var(--transition);
-    }
-    
-    .toc-link:hover {
-      background: var(--bg-light);
-    }
-    
-    .toc-link.active {
-      background: var(--primary-light);
-    }
-    
-    .toc-icon {
-      width: 20px;
-      height: 20px;
-      margin-right: 12px;
-      color: var(--text-medium);
-      flex-shrink: 0;
-    }
-    
-    .toc-link.active .toc-icon {
-      color: var(--primary);
-    }
-    
-    .toc-number {
-      width: 24px;
-      height: 24px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      background: var(--bg);
-      border: 1px solid var(--border-light);
-      border-radius: 50%;
-      font-size: 12px;
-      font-weight: 600;
-      color: var(--text-medium);
-      margin-right: 12px;
-      flex-shrink: 0;
-      transition: background var(--transition), color var(--transition), border-color var(--transition);
-    }
-    
-    .toc-link.active .toc-number {
-      background: var(--primary);
-      color: white;
-      border-color: var(--primary);
-    }
-    
-    .toc-content {
-      flex: 1;
-      transition: opacity var(--transition), width var(--transition);
-      min-width: 0;
-    }
-    
-    .toc-title {
-      font-size: 14px;
-      font-weight: 500;
-      color: var(--text-medium);
-      margin-bottom: 2px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    
-    .toc-link.active .toc-title {
-      color: var(--primary);
-      font-weight: 600;
-    }
-    
-    .toc-desc {
-      font-size: 12px;
-      color: var(--text-light);
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-    }
-    
-    .sidebar-collapsed .toc-content {
-      opacity: 0;
-      width: 0;
-    }
-
-    /* 메인 콘텐츠 */
-    .main-content {
-      margin-left: var(--sidebar-width);
-      flex: 1;
-      transition: margin-left var(--transition);
-    }
-    
-    .main-content.sidebar-collapsed {
-      margin-left: var(--sidebar-collapsed-width);
-    }
-    
-    .main-content.sidebar-hidden {
-      margin-left: 0;
-    }
-
-    /* 슬라이드 컨테이너 */
-    .slides-container {
-      padding-top: calc(var(--header-height) + 4px); /* 4px는 progress bar 높이 */
-      height: 100vh;
-      position: relative;
-      overflow: hidden;
+    .card::-webkit-scrollbar-thumb:hover {
+      background: #a0aec0;
     }
 
     /* 슬라이드 */
     .slide {
-      position: absolute;
-      top: calc(var(--header-height) + 4px);
-      left: 0;
-      width: 100%;
-      height: calc(100vh - var(--header-height) - 4px - 68px); /* 68px는 하단 컨트롤 높이 */
-      opacity: 0;
-      visibility: hidden;
-      overflow-y: auto;
-      transition: opacity 0.3s ease, visibility 0.3s ease;
-      scrollbar-width: thin;
-      padding-bottom: 40px;
+      display: none;
     }
-    
-    .slide::-webkit-scrollbar {
-      width: 6px;
-    }
-    
-    .slide::-webkit-scrollbar-track {
-      background: transparent;
-    }
-    
-    .slide::-webkit-scrollbar-thumb {
-      background: var(--border);
-      border-radius: 3px;
-    }
-    
     .slide.active {
-      opacity: 1;
-      visibility: visible;
-      z-index: 10;
-    }
-    
-    .slide-inner {
-      max-width: 960px;
-      margin: 0 auto;
-      padding: 32px 40px;
-    }
-
-    /* 하단 컨트롤 */
-    .slide-controls {
-      position: fixed;
-      bottom: 0;
-      left: var(--sidebar-width);
-      right: 0;
-      height: 68px;
-      background: var(--bg);
-      border-top: 1px solid var(--border-light);
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      padding: 0 24px;
-      z-index: 90;
-      transition: left var(--transition);
-    }
-    
-    .slide-controls.sidebar-collapsed {
-      left: var(--sidebar-collapsed-width);
-    }
-    
-    .slide-controls.sidebar-hidden {
-      left: 0;
-    }
-    
-    .slide-counter {
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--text-medium);
-    }
-    
-    .slide-actions {
-      display: flex;
-      gap: 8px;
-    }
-    
-    .slide-btn {
-      height: 40px;
-      padding: 0 16px;
-      border-radius: var(--radius-sm);
-      font-size: 14px;
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all var(--transition);
-      border: none;
-      gap: 6px;
-      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
-    }
-    
-    .slide-btn.primary {
-      background: var(--primary);
-      color: white;
-    }
-    
-    .slide-btn.primary:hover {
-      background: var(--primary-dark);
-    }
-    
-    .slide-btn.secondary {
-      background: var(--bg-light);
-      color: var(--text-medium);
-    }
-    
-    .slide-btn.secondary:hover {
-      background: var(--border-light);
-    }
-    
-    .slide-btn:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
+      display: block;
     }
 
     /* 텍스트 스타일 */
     h1 {
       font-size: 32px;
       font-weight: 700;
-      color: var(--text-dark);
-      margin-bottom: 16px;
-      line-height: 1.3;
-      letter-spacing: -0.5px;
+      color: var(--primary);
+      margin-bottom: var(--space-sm);
     }
-    
     h2 {
       font-size: 22px;
-      font-weight: 600;
+      font-weight: 500;
       color: var(--text-medium);
-      margin-bottom: 20px;
-      line-height: 1.4;
-      letter-spacing: -0.3px;
+      margin-bottom: var(--space-md);
     }
-    
     p {
       font-size: 16px;
       line-height: 1.7;
       color: var(--text-dark);
-      margin-bottom: 16px;
+      margin-bottom: var(--space-md);
     }
     
+    /* 핵심 텍스트 강조 스타일 */
     .key-point {
       font-weight: 600;
       color: var(--primary);
     }
     
+    /* 글자 단위 하이라이트 */
     .highlight-text {
-      background: var(--accent-light);
-      padding: 0 2px;
-      border-radius: 2px;
-      color: var(--accent-dark);
+      background-color: rgba(247, 213, 64, 0.2);
+      padding: 2px 0;
     }
     
-    .divider {
+    /* 단락 구분 스타일 */
+    .section-divider {
       height: 1px;
-      background: var(--border-light);
-      margin: 24px 0;
+      background-color: #e5e8ec;
+      margin: var(--space-md) 0;
       width: 100%;
+      clear: both;
+    }
+
+    /* ul, ol 분리하여 스타일 */
+    ul {
+      list-style: none;
+      margin: 0 0 var(--space-md) 0;
+      padding: 0;
+    }
+    ul li {
+      position: relative;
+      padding-left: 24px;
+      margin-bottom: 12px;
+      font-size: 16px;
+    }
+    ul li::before {
+      content: "•";
+      position: absolute;
+      left: 8px;
+      color: var(--primary);
+      font-weight: bold;
+    }
+    
+    /* 중요 리스트 아이템 강조 */
+    ul li.highlight {
+      background-color: rgba(247, 213, 64, 0.12);
+      padding: 8px 24px;
+      border-radius: 4px;
+    }
+
+    ol {
+      list-style: decimal;
+      margin: 0 0 var(--space-md) 24px;
+      padding: 0;
+    }
+    ol li {
+      margin-bottom: 12px;
+      font-size: 16px;
+      padding-left: 8px;
     }
 
     /* 하이라이트 박스 */
     .highlight-box {
-      background: var(--primary-light);
+      background: linear-gradient(to right, rgba(70, 115, 235, 0.08), rgba(70, 115, 235, 0.02));
+      border-left: 4px solid var(--accent);
       border-radius: var(--radius);
-      padding: 24px;
-      margin-bottom: 24px;
-      position: relative;
+      padding: var(--space-md) var(--space-md);
+      margin-bottom: var(--space-lg);
+      box-shadow: var(--shadow-light);
     }
-    
-    .highlight-box::before {
+    .highlight-box strong {
+      color: var(--primary);
+      position: relative;
+      display: inline-block;
+    }
+    .highlight-box strong::after {
       content: '';
       position: absolute;
-      left: 0;
-      top: 0;
       bottom: 0;
-      width: 4px;
-      background: var(--primary);
-      border-radius: var(--radius) 0 0 var(--radius);
+      left: 0;
+      width: 100%;
+      height: 30%;
+      background-color: rgba(247, 213, 64, 0.3);
+      z-index: -1;
+      border-radius: 2px;
+    }
+
+    /* 로고 배너 */
+    .logo-banner {
+      width: 100%;
+      height: 180px;
+      background: url('/api/placeholder/400/180') center/contain no-repeat;
+      margin-bottom: var(--space-lg);
+    }
+
+    /* 듀얼 박스 */
+    .dual-box {
+      display: flex;
+      gap: var(--space-md);
+      flex-wrap: wrap;
+      margin-bottom: var(--space-lg);
     }
     
-    .highlight-box-title {
+    /* box 스타일링 */
+    .box {
+      flex: 1;
+      background-color: rgba(70, 115, 235, 0.05);
+      border-radius: var(--radius);
+      padding: var(--space-md);
+      font-size: 16px;
+      color: var(--text-dark);
+      border: 1px solid rgba(70, 115, 235, 0.1);
+    }
+    .box ul {
+      margin-bottom: 0;
+    }
+    .box li {
+      margin-bottom: 6px;
+    }
+    .box li:last-child {
+      margin-bottom: 0;
+    }
+    .box h3 {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: var(--space-sm);
+    }
+
+    /* 인용구 */
+    blockquote {
+      font-size: 16px;
+      font-style: italic;
+      color: var(--primary);
+      border-left: 4px solid var(--primary);
+      padding: var(--space-sm) var(--space-md);
+      margin: var(--space-md) 0;
+      background-color: rgba(70, 115, 235, 0.05);
+      border-radius: 0 var(--radius) var(--radius) 0;
+    }
+
+    /* 타임라인 */
+    .timeline {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      margin: var(--space-md) 0 var(--space-lg);
+      padding: var(--space-xs) 0;
+    }
+    .timeline::before {
+      content: "";
+      position: absolute;
+      top: 50%;
+      left: 0;
+      right: 0;
+      height: 2px;
+      background-color: #d1d5db;
+      z-index: 1;
+    }
+    .timeline-item {
+      position: relative;
+      color: #fff;
+      padding: 8px 0;
+      width: 110px;
+      height: 40px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 500;
+      z-index: 2;
+      text-align: center;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-light);
+    }
+    .timeline-item:nth-child(1) {
+      background-color: var(--primary);
+    }
+    .timeline-item:nth-child(2) {
+      background-color: var(--primary);
+    }
+    .timeline-item:nth-child(3) {
+      background: linear-gradient(to right, var(--primary), var(--accent));
+    }
+    .timeline-item:nth-child(4) {
+      background-color: var(--accent);
+    }
+
+    /* 버튼 */
+    .button-container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: var(--space-xl);
+    }
+    .button-container button {
+      background-color: var(--primary);
+      color: var(--white);
+      border: none;
+      border-radius: var(--radius);
+      padding: 12px 24px;
       font-size: 16px;
       font-weight: 600;
+      cursor: pointer;
+      transition: 0.2s ease;
+      position: relative;
+      overflow: hidden;
+    }
+    .button-container button:hover:not(:disabled) {
+      background-color: var(--primary-light);
+    }
+    .button-container button:disabled {
+      background-color: #d1d5db;
+      cursor: not-allowed;
+    }
+    .button-container button#prevBtn {
+      background-color: var(--white);
       color: var(--primary);
-      margin-bottom: 8px;
+      border: 1px solid var(--primary);
+    }
+    .button-container button#prevBtn:hover:not(:disabled) {
+      background-color: rgba(70, 115, 235, 0.05);
+    }
+    .button-container button#homeBtn {
+      background-color: var(--accent);
+      color: var(--text-dark);
+    }
+    .button-container button#homeBtn:hover {
+      background-color: var(--accent-dark);
+    }
+    .button-container button::after {
+      content: '';
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      background: rgba(255,255,255,0.15);
+      transform: translateY(100%);
+      transition: transform 0.3s ease;
+    }
+    .button-container button:active::after {
+      transform: translateY(0);
+    }
+
+    /* 이미지 배너 */
+    .image-banner {
+      width: 100%;
+      height: 200px;
+      background-color: #f0f4ff;
+      margin-bottom: var(--space-md);
+      border-radius: var(--radius);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 20px;
+      color: var(--primary);
+      font-weight: 500;
     }
 
     /* 메트릭 카드 */
     .metrics {
       display: flex;
-      gap: 16px;
-      margin: 24px 0;
+      justify-content: space-between;
+      margin: var(--space-md) 0;
+      gap: var(--space-md);
     }
-    
     .metric-card {
       flex: 1;
-      background: var(--bg);
+      background-color: var(--white);
       border-radius: var(--radius);
-      padding: 24px;
+      padding: var(--space-md);
       text-align: center;
-      border: 1px solid var(--border-light);
-      box-shadow: var(--shadow-sm);
-      transition: all var(--transition);
+      box-shadow: var(--shadow-light);
+      border: 1px solid rgba(70, 115, 235, 0.1);
     }
-    
-    .metric-card:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow);
-    }
-    
     .metric-value {
-      font-size: 36px;
+      font-size: 32px;
       font-weight: 700;
       color: var(--primary);
       margin-bottom: 4px;
-      line-height: 1.2;
     }
-    
     .metric-label {
       font-size: 14px;
       color: var(--text-medium);
-      font-weight: 500;
     }
 
-    /* 리스트 스타일 */
-    ul {
-      list-style: none;
-      margin: 0 0 20px 0;
-    }
-    
-    ul li {
-      padding-left: 24px;
-      position: relative;
-      margin-bottom: 12px;
-      font-size: 16px;
-    }
-    
-    ul li::before {
-      content: '';
-      position: absolute;
-      left: 6px;
-      top: 10px;
-      width: 6px;
-      height: 6px;
-      border-radius: 50%;
-      background: var(--primary);
-    }
-    
-    ul.highlight-bullets li::before {
-      background: var(--accent);
-    }
-    
-    ul li.highlight {
-      background: var(--primary-light);
-      border-radius: var(--radius-sm);
-      padding: 12px 24px;
-    }
-
-    /* 대화 예시 */
-    .chat-example {
-      background: var(--bg);
+    /* 스텝 카드 */
+    .step-card {
+      background-color: white;
       border-radius: var(--radius);
-      border: 1px solid var(--border-light);
-      margin-bottom: 24px;
+      border: 1px solid rgba(70, 115, 235, 0.1);
+      margin-bottom: 20px;
       overflow: hidden;
-      box-shadow: var(--shadow-sm);
+      box-shadow: var(--shadow-light);
     }
-    
-    .chat-header {
-      background: var(--primary-light);
-      color: var(--primary);
-      font-weight: 600;
-      padding: 12px 16px;
-      font-size: 14px;
-    }
-    
-    .chat-messages {
-      padding: 16px;
-    }
-    
-    .chat-message {
+    .step-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid rgba(70, 115, 235, 0.1);
       display: flex;
-      margin-bottom: 16px;
+      align-items: center;
     }
-    
-    .chat-message:last-child {
-      margin-bottom: 0;
-    }
-    
-    .chat-avatar {
-      width: 36px;
-      height: 36px;
+    .step-number {
+      width: 32px;
+      height: 32px;
       border-radius: 50%;
-      margin-right: 12px;
-      flex-shrink: 0;
+      background-color: var(--primary-light);
+      color: var(--primary);
       display: flex;
       align-items: center;
       justify-content: center;
+      font-size: 16px;
       font-weight: 600;
-      font-size: 14px;
+      margin-right: 16px;
     }
-    
-    .chat-avatar.user {
-      background: var(--primary-light);
-      color: var(--primary);
+    .step-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: var(--text-dark);
     }
-    
-    .chat-avatar.ai {
-      background: var(--accent-light);
-      color: var(--accent-dark);
+    .step-content {
+      padding: 20px;
     }
-    
-    .chat-bubble {
-      background: var(--bg-light);
-      padding: 12px 16px;
-      border-radius: 0 var(--radius-sm) var(--radius-sm) var(--radius-sm);
-      max-width: calc(100% - 48px);
-      font-size: 14px;
+    .step-description {
+      font-size: 16px;
+      margin-bottom: 16px;
       line-height: 1.6;
-    }
-    
-    .chat-bubble.ai {
-      background: var(--bg);
-      border: 1px solid var(--border-light);
-      border-radius: var(--radius-sm) 0 var(--radius-sm) var(--radius-sm);
+      color: var(--text-medium);
     }
 
-    /* 팁 */
+    /* 팁 스타일 */
     .tip {
-      background: var(--accent-light);
-      border-radius: var(--radius);
-      padding: 24px;
-      margin: 24px 0;
-      position: relative;
-    }
-    
-    .tip::before {
-      content: '';
-      position: absolute;
-      left: 0;
-      top: 0;
-      bottom: 0;
-      width: 4px;
-      background: var(--accent);
-      border-radius: var(--radius) 0 0 var(--radius);
-    }
-    
-    .tip-title {
-      font-weight: 600;
-      color: var(--accent-dark);
-      margin-bottom: 8px;
+      background-color: var(--accent-light);
+      border-radius: 8px;
+      padding: 16px 20px;
+      font-size: 16px;
+      color: var(--text-dark);
+      line-height: 1.6;
+      margin: 16px 0;
       display: flex;
-      align-items: center;
+      align-items: flex-start;
+      gap: 12px;
+      border-left: 4px solid var(--accent);
+    }
+    .tip::before {
+      content: "💡";
     }
     
-    .tip-title::before {
-      content: '💡';
-      margin-right: 8px;
-    }
-
-    /* 토스트 메시지 */
-    .toast-container {
-      position: fixed;
-      bottom: 80px;
-      left: 50%;
-      transform: translateX(-50%);
-      z-index: 200;
+    /* AI 응답 확인 팁 스타일 수정 */
+    .ai-check-tip {
+      background-color: var(--primary-light);
+      border-radius: 8px;
+      padding: 16px 20px;
+      font-size: 16px;
+      color: var(--text-dark);
+      line-height: 1.6;
+      margin: 16px 0;
       display: flex;
       flex-direction: column;
       gap: 8px;
-      pointer-events: none;
+      border-left: 4px solid var(--primary);
     }
-    
-    .toast {
-      background: var(--text-dark);
-      color: white;
-      border-radius: var(--radius);
-      padding: 14px 24px;
-      font-size: 14px;
-      font-weight: 500;
-      box-shadow: var(--shadow-lg);
-      opacity: 0;
-      transform: translateY(20px);
-      transition: all var(--transition);
-      pointer-events: auto;
+    .ai-check-tip strong {
+      color: var(--primary);
+      margin-bottom: 4px;
+      display: block;
     }
-    
-    .toast.show {
-      opacity: 1;
-      transform: translateY(0);
+    .ai-check-questions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
     }
-    
-    .toast.success {
-      background: var(--success);
-    }
-    
-    .toast.error {
-      background: var(--error);
+    .ai-check-question {
+      background-color: var(--white);
+      border-radius: 4px;
+      padding: 6px 12px;
+      box-shadow: var(--shadow-light);
+      font-style: italic;
     }
 
-    /* 단계별 카드 */
-    .step-cards {
-      display: flex;
-      gap: 16px;
-      margin: 24px 0;
-      flex-wrap: wrap;
-    }
-    
-    .step-card {
-      flex: 1;
-      min-width: 250px;
-      background: var(--bg);
+    /* 사례 카드 */
+    .case-study {
+      background-color: var(--white);
       border-radius: var(--radius);
-      padding: 24px;
-      border: 1px solid var(--border-light);
-      box-shadow: var(--shadow-sm);
-      text-align: center;
-      transition: all var(--transition);
+      border: 1px solid rgba(70, 115, 235, 0.1);
+      margin-bottom: 20px;
+      overflow: hidden;
     }
-    
-    .step-card:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow);
+    .case-header {
+      padding: 16px 20px;
+      background-color: var(--primary-light);
+      display: flex;
+      align-items: center;
     }
-    
-    .step-icon {
-      width: 60px;
-      height: 60px;
-      background: var(--primary-light);
+    .case-icon {
+      width: 40px;
+      height: 40px;
       border-radius: 50%;
-      margin: 0 auto 16px;
+      background-color: var(--primary);
+      color: var(--white);
       display: flex;
       align-items: center;
       justify-content: center;
-      color: var(--primary);
-      font-size: 24px;
-    }
-    
-    .step-title {
       font-size: 18px;
-      font-weight: 700;
-      margin-bottom: 8px;
-      color: var(--text-dark);
+      font-weight: 600;
+      margin-right: 16px;
     }
-    
-    .step-desc {
-      font-size: 14px;
-      color: var(--text-medium);
-      line-height: 1.5;
-    }
-
-    /* 비서 카드 */
-    .assistant-cards {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
-      margin: 24px 0;
-    }
-    
-    .assistant-card {
-      flex: 1 1 250px;
-      background: var(--bg);
-      border-radius: var(--radius);
-      padding: 24px;
-      border: 1px solid var(--border-light);
-      box-shadow: var(--shadow-sm);
-      transition: all var(--transition);
-    }
-    
-    .assistant-card:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow);
-    }
-    
-    .assistant-icon {
-      width: 48px;
-      height: 48px;
-      border-radius: 50%;
-      margin-bottom: 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 24px;
-    }
-    
-    .assistant-card:nth-child(1) .assistant-icon {
-      background: var(--primary-light);
-      color: var(--primary);
-    }
-    
-    .assistant-card:nth-child(2) .assistant-icon {
-      background: #FFF0E6;
-      color: #FF7043;
-    }
-    
-    .assistant-card:nth-child(3) .assistant-icon {
-      background: #F3E8FF;
-      color: #9C27B0;
-    }
-    
-    .assistant-card:nth-child(4) .assistant-icon {
-      background: var(--accent-light);
-      color: var(--accent-dark);
-    }
-    
-    .assistant-title {
+    .case-title {
       font-size: 18px;
-      font-weight: 700;
-      margin-bottom: 6px;
-      color: var(--text-dark);
-    }
-    
-    .assistant-model {
-      font-size: 14px;
-      color: var(--text-light);
-      margin-bottom: 12px;
-    }
-    
-    .assistant-desc {
-      font-size: 14px;
-      color: var(--text-medium);
-      line-height: 1.5;
-      margin-bottom: 16px;
-    }
-    
-    .assistant-tags {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 6px;
-    }
-    
-    .assistant-tag {
-      font-size: 12px;
-      background: var(--primary-light);
+      font-weight: 600;
       color: var(--primary);
-      padding: 4px 10px;
-      border-radius: 12px;
-      font-weight: 500;
     }
-
-    /* 부서별 카드 */
+    .case-content {
+      padding: 20px;
+    }
+    .case-quote {
+      font-style: italic;
+      color: var(--text-medium);
+      margin-top: 12px;
+    }
+    
+    /* 비교 테이블 */
+    .comparison-table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-bottom: 24px;
+    }
+    .comparison-table th, .comparison-table td {
+      padding: 12px 16px;
+      text-align: left;
+      border-bottom: 1px solid #e5e8ec;
+    }
+    .comparison-table th {
+      background-color: rgba(70, 115, 235, 0.05);
+      font-weight: 600;
+      color: var(--primary);
+    }
+    .comparison-table tr:last-child td {
+      border-bottom: none;
+    }
+    
+    /* 팀별 카드 */
     .team-cards {
       display: flex;
       flex-wrap: wrap;
       gap: 16px;
       margin-bottom: 24px;
     }
-    
     .team-card {
       flex: 1 1 calc(50% - 16px);
       min-width: 240px;
-      background: var(--bg);
+      background-color: var(--white);
       border-radius: var(--radius);
-      padding: 24px;
-      border: 1px solid var(--border-light);
-      box-shadow: var(--shadow-sm);
-      transition: all var(--transition);
+      padding: 16px;
+      border: 1px solid rgba(70, 115, 235, 0.1);
     }
-    
-    .team-card:hover {
-      transform: translateY(-2px);
-      box-shadow: var(--shadow);
-    }
-    
-    .team-card h3 {
-      font-size: 18px;
-      font-weight: 700;
+    .team-card h4 {
+      font-size: 16px;
+      font-weight: 600;
       color: var(--primary);
-      margin-bottom: 12px;
-    }
-
-    /* 검색 결과 하이라이트 */
-    .search-highlight {
-      background: var(--accent-light);
-      color: var(--accent-dark);
-      padding: 0 2px;
-      border-radius: 2px;
-    }
-
-    /* 목표 카드 */
-    .goal-card {
-      background: var(--bg);
-      border-radius: var(--radius);
-      padding: 32px;
-      border: 1px solid var(--border-light);
-      box-shadow: var(--shadow-sm);
-      text-align: center;
-      margin: 24px 0 32px;
-    }
-    
-    .goal-title {
-      font-size: 20px;
-      font-weight: 700;
-      color: var(--text-dark);
-      margin-bottom: 24px;
-    }
-    
-    .goal-steps {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      gap: 24px;
-      flex-wrap: wrap;
-    }
-    
-    .goal-step {
-      flex: 1;
-      min-width: 200px;
-      text-align: center;
-    }
-    
-    .goal-step-icon {
-      width: 70px;
-      height: 70px;
-      background: var(--primary-light);
-      border-radius: 50%;
-      margin: 0 auto 16px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 28px;
-      color: var(--primary);
-      font-weight: 700;
-    }
-    
-    .goal-step-title {
-      font-size: 18px;
-      font-weight: 700;
-      color: var(--text-dark);
       margin-bottom: 8px;
     }
     
-    .goal-step-desc {
-      font-size: 15px;
-      color: var(--text-medium);
-      line-height: 1.5;
+    /* 예시 대화 */
+    .chat-example {
+      border: 1px solid rgba(70, 115, 235, 0.1);
+      border-radius: var(--radius);
+      margin-bottom: 24px;
+      overflow: hidden;
+    }
+    .chat-header {
+      background-color: var(--primary-light);
+      color: var(--primary);
+      padding: 12px 16px;
+      font-weight: 600;
+    }
+    .chat-messages {
+      padding: 16px;
+    }
+    .chat-message {
+      margin-bottom: 16px;
+      display: flex;
+      align-items: flex-start;
+    }
+    .chat-message:last-child {
+      margin-bottom: 0;
+    }
+    .chat-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background-color: var(--primary-light);
+      color: var(--primary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      margin-right: 12px;
+      flex-shrink: 0;
+    }
+    .chat-avatar.ai {
+      background-color: var(--secondary-light);
+      color: var(--secondary);
+    }
+    .chat-bubble {
+      background-color: #f5f7fa;
+      padding: 12px 16px;
+      border-radius: 0 8px 8px 8px;
+      max-width: calc(100% - 48px);
+    }
+    .chat-bubble.ai {
+      background-color: var(--white);
+      border: 1px solid #e5e8ec;
+      border-radius: 8px 0 8px 8px;
     }
 
-    /* 반응형 스타일 */
-    @media (max-width: 1200px) {
-      .slide-inner {
-        max-width: 800px;
-      }
+    /* 비서 카드 스타일 */
+    .assistant-cards {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin: 24px 0;
     }
-    
-    @media (max-width: 992px) {
-      .search-container {
-        width: 240px;
-      }
-      
-      .slide-inner {
-        padding: 24px 32px;
-      }
-      
-      h1 {
-        font-size: 28px;
-      }
+    .assistant-card {
+      flex: 1 1 250px;
+      background-color: var(--white);
+      border-radius: var(--radius);
+      border: 1px solid rgba(70, 115, 235, 0.1);
+      padding: 20px;
+      transition: transform 0.2s, box-shadow 0.2s;
+      position: relative;
+      overflow: hidden;
     }
-    
+    .assistant-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.08);
+    }
+    .assistant-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+    }
+    .assistant-card:nth-child(1) .assistant-icon {
+      background-color: #E6F7FF;
+      color: #0086F0;
+    }
+    .assistant-card:nth-child(2) .assistant-icon {
+      background-color: #FFF3E0;
+      color: #FF9800;
+    }
+    .assistant-card:nth-child(3) .assistant-icon {
+      background-color: #F3E5F5;
+      color: #9C27B0;
+    }
+    .assistant-card:nth-child(4) .assistant-icon {
+      background-color: #E8F5E9;
+      color: #4CAF50;
+    }
+    .assistant-title {
+      font-size: 18px;
+      font-weight: 600;
+      margin-bottom: 6px;
+      color: var(--text-dark);
+    }
+    .assistant-model {
+      font-size: 14px;
+      color: var(--text-medium);
+      margin-bottom: 12px;
+    }
+    .assistant-description {
+      font-size: 14px;
+      color: var(--text-light);
+      line-height: 1.5;
+      margin-bottom: 12px;
+    }
+    .assistant-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-top: auto;
+    }
+    .assistant-tag {
+      font-size: 12px;
+      background-color: var(--primary-light);
+      color: var(--primary);
+      padding: 3px 8px;
+      border-radius: 12px;
+    }
+
+    /* 반응형 디자인 */
     @media (max-width: 768px) {
-      .sidebar {
-        transform: translateX(-100%);
-      }
-      
-      .main-content {
-        margin-left: 0;
-      }
-      
-      .header {
-        left: 0;
-      }
-      
-      .slide-controls {
-        left: 0;
-      }
-      
-      .progress-indicator {
-        left: 0;
-      }
-      
-      .sidebar-toggle {
-        display: flex;
-      }
-      
-      .search-container {
-        width: 200px;
-      }
-      
-      .search-suggestions {
-        position: fixed;
-        top: var(--header-height);
-        left: 0;
-        right: 0;
-        width: 100%;
-        border-radius: 0;
-      }
-      
-      .slide-inner {
-        padding: 16px 20px;
-      }
-      
-      .metrics, 
-      .step-cards,
-      .assistant-cards {
+      .dual-box {
         flex-direction: column;
       }
       
       h1 {
-        font-size: 24px;
+        font-size: 28px;
       }
       
       h2 {
         font-size: 20px;
       }
       
-      .goal-steps {
+      .card {
+        padding: var(--space-md);
+      }
+      
+      .button-container button {
+        padding: 10px 16px;
+      }
+      
+      blockquote {
+        padding: var(--space-xs) var(--space-sm);
+      }
+
+      .metrics {
         flex-direction: column;
-        gap: 32px;
+      }
+      
+      .team-card {
+        flex: 1 1 100%;
+      }
+      
+      .assistant-card {
+        flex: 1 1 100%;
       }
     }
-    
-    @media (max-width: 576px) {
-      .search-container {
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 22px;
+      }
+      
+      p, ul li, ol li {
+        font-size: 15px;
+      }
+      
+      .timeline {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: var(--space-sm);
+      }
+      
+      .timeline::before {
         display: none;
       }
       
       .header-title {
         font-size: 16px;
       }
+    }
+  </style>
+</head>
+<body>
+  <!-- 헤더 -->
+  <header>
+    <img src="Logo.png" alt="모비데이즈 로고" />
+    <div class="header-title">웍스AI로 일하는 방식의 혁신</div>
+  </header>
+
+  <!-- 진행 바 -->
+  <div class="progress-bar">
+    <div class="progress" id="progress"></div>
+  </div>
+  <!-- 단계 카운터 -->
+  <div class="step-counter" id="stepCounter">1 / 9</div>
+
+  <!-- 메인 컨테이너 -->
+  <div class="container">
+    <div class="card visible" id="cardContainer">
+      <!-- Slide 1: 도입부 -->
+      <div class="slide active" id="slide1">
+        <h1>AI 시대의 새로운 일하는 방식</h1>
+        <h2>왜 지금 AI를 써야 하며, 어떻게 나의 역량을 확장시킬 수 있을까요?</h2>
+
+        <div class="highlight-box" style="background: linear-gradient(to right, rgba(70, 115, 235, 0.15), rgba(70, 115, 235, 0.05)); border-left: 4px solid #F7D540;">
+          <strong>전 세계 마케팅 전문가들이 이미 AI로 일상 업무의 30%를 자동화하고 있습니다. 우리는 어떨까요?</strong><br>
+          지금 우리는 AI가 업무 방식을 완전히 재정의하는 시대를 살고 있습니다.<br>
+          이 발표에서는 AI가 우리의 일상 업무를 어떻게 바꿀 수 있는지, 그리고 
+          '웍스AI'를 어떻게 활용하면 더 창의적이고 효율적으로 일할 수 있는지 함께 알아보겠습니다.
+        </div>
+        
+        <div class="metrics">
+          <div class="metric-card">
+            <div class="metric-value">30%</div>
+            <div class="metric-label">업무 시간 단축</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value">240+</div>
+            <div class="metric-label">연간 절약 시간(시간)</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-value">2-3x</div>
+            <div class="metric-label">아이디어 발굴 속도</div>
+          </div>
+        </div>
+
+        <p>여러분이 자문해볼 질문들:</p>
+        <ul>
+          <li class="highlight">내 업무 시간을 하루에 1-2시간 이상 절약할 수 있다면?</li>
+          <li class="highlight">반복적인 작업 대신 진짜 중요한 일에 집중할 수 있다면?</li>
+          <li class="highlight">창의적인 아이디어를 2-3배 더 빠르게 발전시킬 수 있다면?</li>
+          <li class="highlight">내 전문성을 10배 더 효과적으로 활용할 수 있다면?</li>
+        </ul>
+
+        <p>이 모든 것이 오늘부터 <span class="key-point">웍스AI</span>로 가능합니다.</p>
+      </div>
+
+      <!-- Slide 2: AI 시대의 역량 변화 -->
+      <div class="slide" id="slide2">
+        <h1>AI 시대의 역량 재정의</h1>
+        <p>AI의 등장은 우리가 생각하는 "역량"이라는 개념을 완전히 바꿔놓았습니다. 특히 LLM 기반 AI의 급속한 발전으로 <span class="highlight-text">AI를 사용하는 사람과 사용하지 않는 사람 간의 격차</span>가 급격히 벌어지고 있습니다.</p>
+        
+        <div class="highlight-box">
+          <strong>맥킨지 글로벌 연구소의 "AI 시대의 직무 역량 변화" 연구에 따르면</strong><br>
+          인공지능이 발전할수록 기업에서 필요로 하는 인재 역량이 크게 달라지고 있습니다.<br>
+          데이터 분석이나 단순 작업은 AI가 대체하는 반면, 인간 고유의 창의력과 판단력은 더 중요해집니다.
+        </div>
+        
+        <h2>AI 시대에 달라지는 업무 역량:</h2>
+        <ul>
+          <li><span class="key-point">단순 반복 작업:</span> AI가 효율적으로 처리 (이메일 초안 작성, 자료 요약, 기초 정리 등)</li>
+          <li><span class="key-point">단순 데이터 분석:</span> AI가 빠르게 처리하고 시각적 정리 제공</li>
+          <li><span class="key-point">창의적 사고/전략 수립:</span> 사람이 주도, AI는 아이디어 확장 도구로 활용</li>
+          <li><span class="key-point">감성적 소통/공감 능력:</span> 여전히 사람의 고유 영역으로 더욱 중요해짐</li>
+        </ul>
+
+        <div class="section-divider"></div>
+        
+        <h2>AI 시대에 더욱 중요해지는 역량:</h2>
+        <ul>
+          <li><span class="key-point">효과적인 질문 능력:</span> AI에게 명확한 지시를 내리고 필요한 정보를 얻어내는 능력</li>
+          <li><span class="key-point">비판적 판단력:</span> AI가 제공한 정보와 대안을 평가하고 선별하는 능력</li>
+          <li><span class="key-point">창의적 종합력:</span> AI의 다양한 아이디어를 연결하여 새로운 가치를 창출하는 능력</li>
+        </ul>
+
+        <blockquote>
+          "AI 시대에는 단순히 정보를 아는 것보다 정보를 어떻게 활용하고 평가하는지가 더 중요합니다.<br>
+          이제 전문가란 모든 것을 아는 사람이 아니라, 필요한 정보를 AI와 함께 효과적으로 찾아내고 활용하는 사람입니다."
+        </blockquote>
+      </div>
+
+      <!-- Slide 3: AI 활용한 사람 vs 안 한 사람의 격차 -->
+      <div class="slide" id="slide3">
+        <h1>AI 활용의 현실적 격차</h1>
+        <p>같은 역할과 책임을 가진 두 사람의 실제 업무 현실을 비교해보겠습니다.</p>
+        
+        <div class="comparison-table" style="margin-top: 20px; margin-bottom: 30px;">
+          <table style="width:100%; border-collapse: collapse; border-radius: 10px; overflow: hidden; box-shadow: var(--shadow-light);">
+            <thead>
+              <tr>
+                <th style="width: 30%; background-color: #F3F4FF; color: var(--primary); padding: 15px;">업무 활동</th>
+                <th style="width: 35%; background-color: #F3F4FF; color: var(--text-dark); padding: 15px;">AI 없이 일하는 직원</th>
+                <th style="width: 35%; background-color: var(--primary-light); color: var(--primary); padding: 15px;">AI와 함께 일하는 직원</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td style="padding: 12px; border-bottom: 1px solid #e5e8ec; font-weight: 500;">아침 업무 계획</td>
+                <td style="padding: 12px; border-bottom: 1px solid #e5e8ec;">15-20분 수동 계획</td>
+                <td style="padding: 12px; border-bottom: 1px solid #e5e8ec; background-color: rgba(70, 115, 235, 0.05);"><strong>5분</strong> - AI가 우선순위 제안</td>
+              </tr>
+              <tr>
+                <td style="padding: 12px; border-bottom: 1px solid #e5e8ec; font-weight: 500;">보고서 작성</td>
+                <td style="padding: 12px; border-bottom: 1px solid #e5e8ec;">3-5시간 작성</td>
+                <td style="padding: 12px; border-bottom: 1px solid #e5e8ec; background-color: rgba(70, 115, 235, 0.05);"><strong>1.5-2시간</strong> - 초안 생성 후 편집</td>
+              </tr>
+              <tr>
+                <td style="padding: 12px; border-bottom: 1px solid #e5e8ec; font-weight: 500;">아이디어 발굴</td>
+                <td style="padding: 12px; border-bottom: 1px solid #e5e8ec;">1시간 브레인스토밍</td>
+                <td style="padding: 12px; border-bottom: 1px solid #e5e8ec; background-color: rgba(70, 115, 235, 0.05);"><strong>20-30분</strong> - AI 제안 확장</td>
+              </tr>
+              <tr>
+                <td style="padding: 12px; font-weight: 500;">주간 절약 시간</td>
+                <td style="padding: 12px;">기준</td>
+                <td style="padding: 12px; background-color: rgba(70, 115, 235, 0.05);"><strong>약 10시간</strong> (→ 연간 480시간)</td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+        <div class="highlight-box">
+          <strong>이 격차는 계속 커지고 있습니다</strong><br>
+          AI를 능숙하게 활용하는 전문가들은 이미 하루 평균 2시간 이상을 절약하고 있습니다.<br>
+          이는 연간 <span class="highlight-text">480시간 이상</span>(약 60일의 업무일)에 해당하는 엄청난 시간입니다!
+        </div>
+
+        <p><strong>실질적인 의미:</strong></p>
+        <ul>
+          <li>직원 한 명당 <span class="highlight-text">주 평균 5~10시간 절약</span> 가능</li>
+          <li>절약된 시간을 <span class="key-point">창의적 사고와 전략적 의사결정</span>에 투자</li>
+          <li>시간 절약을 넘어 <span class="highlight-text">더 높은 품질의 결과물</span> 생산</li>
+        </ul>
+      </div>
+
+      <!-- Slide 4: AI를 활용한 실제 사례 -->
+      <div class="slide" id="slide4">
+        <h1>웍스AI 활용 사례와 프롬프트 예시</h1>
+        
+        <div class="case-study">
+          <div class="case-header">
+            <div class="case-icon">P</div>
+            <div class="case-title">캠페인 결과 보고서 작성</div>
+          </div>
+          <div class="case-content">
+            <div class="chat-example">
+              <div class="chat-header">효과적인 프롬프트 예시</div>
+              <div class="chat-messages">
+                <div class="chat-message">
+                  <div class="chat-avatar">나</div>
+                  <div class="chat-bubble">
+                    다음 정보를 바탕으로 '게임앱 설치 캠페인 결과 보고서'를 작성해줘:
+                    
+                    1. 클라이언트: ABC게임즈
+                    2. 캠페인 기간: 2025년 2월 1일~28일
+                    3. 총 예산: 5,000만원
+                    4. 주요 타겟: 20-35세 남성, 액션게임 선호층
+                    5. 캠페인 목표: CPI 12,000원 이하, 10,000건 설치
+                    6. 매체별 성과:
+                       - 페이스북: 예산 2,000만원, 설치 4,500건, CPI 10,800원
+                       - 구글 UAC: 예산 1,500만원, 설치 2,300건, CPI 13,200원
+                       - 틱톡: 예산 1,500만원, 설치 3,800건, CPI 9,800원
+                    
+                    7. 추가 요청사항:
+                       - 가장 효율이 좋았던 매체와 그 이유 분석
+                       - 다음 캠페인을 위한 3가지 개선점 제안
+                       - 경쟁사 대비 성과 비교 (업계 평균 CPI: 14,000원)
+                       - 클라이언트 경영진을 위한 핵심 성과 요약 (3줄 이내)
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <p><strong>AI 활용 핵심 포인트:</strong></p>
+            <ul>
+              <li>구체적인 수치와 목표를 명확히 제시</li>
+              <li>원하는 분석 항목과 인사이트를 구체적으로 요청</li>
+              <li>보고서 구조와 필요한 섹션을 미리 안내</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="case-study">
+          <div class="case-header">
+            <div class="case-icon">S</div>
+            <div class="case-title">클라이언트 SNS 콘텐츠 기획</div>
+          </div>
+          <div class="case-content">
+            <div class="chat-example">
+              <div class="chat-header">실제 적용 프롬프트 템플릿</div>
+              <div class="chat-messages">
+                <div class="chat-message">
+                  <div class="chat-avatar">나</div>
+                  <div class="chat-bubble">
+                    다음은 [클라이언트명] 브랜드 정보야:
+                    
+                    브랜드: [브랜드명]
+                    제품/서비스: [제품/서비스 설명]
+                    타겟 오디언스: [주 타겟층 설명]
+                    브랜드 톤앤매너: [브랜드 어조와 스타일]
+                    핵심 가치: [브랜드가 중요시하는 가치]
+                    
+                    다음 달 [인스타그램/페이스북/틱톡] 콘텐츠 캘린더를 위한 15개의 포스팅 아이디어를 제안해줘. 각 아이디어는 다음 형식으로 작성해줘:
+                    
+                    1. 제목:
+                    2. 콘텐츠 유형: (이미지, 캐러셀, 릴스, 스토리 등)
+                    3. 핵심 메시지:
+                    4. 사용할 해시태그:
+                    5. CTA(Call-to-Action):
+                    
+                    다음 요소를 고려해줘:
+                    - [특정 시즌/이벤트]
+                    - [최근 트렌드]
+                    - [이전 게시물 중 반응이 좋았던 유형]
+                    - 경쟁사와 차별화되는 콘텐츠
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            <div class="tip">
+              <strong>프롬프트 템플릿 활용 팁:</strong> 이 템플릿을 저장해두고 클라이언트마다 맞춤형으로 수정하여 사용하면 일관된 품질의 콘텐츠 아이디어를 빠르게 얻을 수 있습니다.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 5: 웍스AI를 제대로 활용하는 방법 -->
+      <div class="slide" id="slide5">
+        <h1>웍스AI를 제대로 활용하는 방법</h1>
+        <p>AI를 활용할 때 가장 중요한 것은 <span class="key-point">"AI의 결과물은 내 수준을 넘을 수 없다"</span>는 점을 이해하는 것입니다.</p>
+        
+        <div style="background-color: #F3F4FF; border-radius: 12px; padding: 20px; margin: 24px 0; border: 1px solid rgba(70, 115, 235, 0.2); box-shadow: var(--shadow-light);">
+          <h3 style="color: var(--primary); margin-bottom: 15px; text-align: center;">프롬프트 작성 마스터 5원칙</h3>
+          <div style="display: flex; flex-wrap: wrap; gap: 10px;">
+            <div style="flex: 1; min-width: 200px; background: white; padding: 12px; border-radius: 8px; border-left: 3px solid var(--primary);">
+              <strong style="color: var(--primary);">1. 목표 명확화</strong>
+              <p style="margin-top: 5px; margin-bottom: 0; font-size: 14px;">무슨 일을 위해 AI에게 묻는지 분명히 하세요</p>
+            </div>
+            <div style="flex: 1; min-width: 200px; background: white; padding: 12px; border-radius: 8px; border-left: 3px solid var(--primary);">
+              <strong style="color: var(--primary);">2. 맥락 제공</strong>
+              <p style="margin-top: 5px; margin-bottom: 0; font-size: 14px;">타겟, 브랜드, 예산, 경쟁사 등 배경 정보를 주세요</p>
+            </div>
+            <div style="flex: 1; min-width: 200px; background: white; padding: 12px; border-radius: 8px; border-left: 3px solid var(--primary);">
+              <strong style="color: var(--primary);">3. 결과물 형태 지정</strong>
+              <p style="margin-top: 5px; margin-bottom: 0; font-size: 14px;">표, 리스트, 문단 등 원하는 형식을 알려주세요</p>
+            </div>
+            <div style="flex: 1; min-width: 200px; background: white; padding: 12px; border-radius: 8px; border-left: 3px solid var(--primary);">
+              <strong style="color: var(--primary);">4. 제한 조건 명시</strong>
+              <p style="margin-top: 5px; margin-bottom: 0; font-size: 14px;">글자 수, 시간, 예산 등 제약사항을 알려주세요</p>
+            </div>
+            <div style="flex: 1; min-width: 200px; background: white; padding: 12px; border-radius: 8px; border-left: 3px solid var(--primary);">
+              <strong style="color: var(--primary);">5. 변별력 요구</strong>
+              <p style="margin-top: 5px; margin-bottom: 0; font-size: 14px;">옵션별 장단점, 우선순위 등 비교 분석을 요청하세요</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="chat-example">
+          <div class="chat-header">일반적인 질문 vs 구체적인 질문</div>
+          <div class="chat-messages">
+            <div class="chat-message">
+              <div class="chat-avatar">나</div>
+              <div class="chat-bubble">SNS 콘텐츠 아이디어 추천해줘</div>
+            </div>
+            <div class="chat-message">
+              <div class="chat-avatar ai">AI</div>
+              <div class="chat-bubble ai">
+                (일반적이고 평범한 아이디어만 제공...)
+              </div>
+            </div>
+            <div class="chat-message">
+              <div class="chat-avatar">나</div>
+              <div class="chat-bubble">
+                20-30대 남성 타겟의 스포츠 브랜드 인스타그램용 콘텐츠 아이디어를 추천해줘. 
+                브랜드는 "활동적인 라이프스타일"을 강조하고, 최근 신발 신제품을 런칭했어. 
+                특히 봄 시즌에 맞는 야외 활동 콘텐츠와 제품을 자연스럽게 연결할 수 있는 방법도 포함해줘.
+              </div>
+            </div>
+            <div class="chat-message">
+              <div class="chat-avatar ai">AI</div>
+              <div class="chat-bubble ai">
+                (구체적이고 실용적인 맞춤형 아이디어 제공...)
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="tip">
+          웍스AI는 단순한 답변 도구가 아니라 '사고의 확장 도구'입니다.
+          내가 가진 전문성과 지식을 바탕으로 AI와 대화하며 함께 더 나은 결과물을 만들어가는 과정이 중요합니다.
+        </div>
+      </div>
+
+      <!-- Slide 6: 웍스AI 기본 사용법 -->
+      <div class="slide" id="slide6">
+        <h1>웍스AI 시작하기</h1>
+        
+        <div style="display: flex; justify-content: space-between; margin-bottom: 30px; flex-wrap: wrap; gap: 20px;">
+          <div style="flex: 1; min-width: 250px; background-color: white; border-radius: 12px; box-shadow: var(--shadow-light); padding: 20px; text-align: center; border: 1px solid #e5e8ec;">
+            <div style="width: 60px; height: 60px; background-color: var(--primary-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px;">
+              <span style="font-size: 24px; color: var(--primary);">1</span>
+            </div>
+            <h3 style="margin-bottom: 10px; color: var(--primary);">회원가입</h3>
+            <p style="color: var(--text-medium);">초대 메일의 링크를 통해<br>회사 이메일로 가입하세요</p>
+          </div>
+          
+          <div style="flex: 1; min-width: 250px; background-color: white; border-radius: 12px; box-shadow: var(--shadow-light); padding: 20px; text-align: center; border: 1px solid #e5e8ec;">
+            <div style="width: 60px; height: 60px; background-color: var(--primary-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px;">
+              <span style="font-size: 24px; color: var(--primary);">2</span>
+            </div>
+            <h3 style="margin-bottom: 10px; color: var(--primary);">비서 선택</h3>
+            <p style="color: var(--text-medium);">목적에 맞는 AI 비서를<br>선택하고 시작하세요</p>
+          </div>
+          
+          <div style="flex: 1; min-width: 250px; background-color: white; border-radius: 12px; box-shadow: var(--shadow-light); padding: 20px; text-align: center; border: 1px solid #e5e8ec;">
+            <div style="width: 60px; height: 60px; background-color: var(--primary-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px;">
+              <span style="font-size: 24px; color: var(--primary);">3</span>
+            </div>
+            <h3 style="margin-bottom: 10px; color: var(--primary);">첫 프롬프트</h3>
+            <p style="color: var(--text-medium);">구체적인 질문으로<br>대화를 시작하세요</p>
+          </div>
+        </div>
+        
+        <!-- 비서 유형 상세 설명 섹션 추가 -->
+        <h2>다양한 AI 비서 유형 알아보기</h2>
+        <p>목적과 업무 성격에 맞는 비서를 선택하면 더 효과적인 결과를 얻을 수 있습니다.</p>
+        
+        <div class="assistant-cards">
+          <div class="assistant-card">
+            <div class="assistant-icon">🧠</div>
+            <div class="assistant-title">신중한 똑쟁이</div>
+            <div class="assistant-model">GPT-4o 기반</div>
+            <div class="assistant-description">
+              정확하고 깊이 있는 분석과 고품질 콘텐츠 생성에 탁월합니다. 복잡한 개념을 명확하게 설명하고 전문적인 결과물이 필요할 때 적합합니다.
+            </div>
+            <div class="assistant-tags">
+              <span class="assistant-tag">정확성</span>
+              <span class="assistant-tag">복잡한 작업</span>
+              <span class="assistant-tag">심층 분석</span>
+            </div>
+          </div>
+          
+          <div class="assistant-card">
+            <div class="assistant-icon">❤️</div>
+            <div class="assistant-title">따뜻해진 똑쟁이</div>
+            <div class="assistant-model">GPT-4.5o 기반</div>
+            <div class="assistant-description">
+              최신 GPT-4.5o의 대화, 공감 능력과 정확한 결과물을 결합한 비서입니다. 감성적인 커뮤니케이션과 정확한 정보가 모두 필요할 때 적합합니다.
+            </div>
+            <div class="assistant-tags">
+              <span class="assistant-tag">균형감</span>
+              <span class="assistant-tag">공감 능력</span>
+              <span class="assistant-tag">창의적 작업</span>
+            </div>
+          </div>
+          
+          <div class="assistant-card">
+            <div class="assistant-icon">💬</div>
+            <div class="assistant-title">티키타카 장인</div>
+            <div class="assistant-model">GPT-4o mini 기반</div>
+            <div class="assistant-description">
+              빠른 응답 속도와 자연스러운 대화가 강점입니다. 간단한 질문, 아이디어 브레인스토밍, 일상적인 업무 보조에 적합하며 신속한 피드백이 필요할 때 효과적입니다.
+            </div>
+            <div class="assistant-tags">
+              <span class="assistant-tag">속도</span>
+              <span class="assistant-tag">대화형</span>
+              <span class="assistant-tag">일상 업무</span>
+            </div>
+          </div>
+          
+          <div class="assistant-card">
+            <div class="assistant-icon">👓</div>
+            <div class="assistant-title">느림보 어시스턴트</div>
+            <div class="assistant-model">맞춤형 모델</div>
+            <div class="assistant-description">
+              복잡한 문제에 대해 단계적으로 접근하며 철저하게 사고하는 비서입니다. 심층적인 문제 해결, 논리적 분석, 정교한 계획 수립에 적합합니다.
+            </div>
+            <div class="assistant-tags">
+              <span class="assistant-tag">단계적 접근</span>
+              <span class="assistant-tag">논리적 분석</span>
+              <span class="assistant-tag">철저함</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-divider"></div>
+        
+        <div class="highlight-box">
+          <strong>기능별 전문 비서도 활용해보세요!</strong>
+          <p style="margin-top: 10px; margin-bottom: 0;">
+            웍스AI는 특정 업무에 특화된 다양한 전문 비서도 제공합니다:
+          </p>
+          <ul style="margin-top: 12px; margin-bottom: 0;">
+            <li><span class="key-point">보고서/문서 작성:</span> 보고서 초안, 파워포인트 기획, 이메일 작성 등</li>
+            <li><span class="key-point">데이터 분석:</span> 데이터 시각화, 엑셀 함수 추천, SQL 쿼리 작성 등</li>
+            <li><span class="key-point">번역/교정:</span> 문서 번역, 영문 이메일 작성, 문장 교정 등</li>
+            <li><span class="key-point">그림/디자인:</span> 간단한 이미지 생성, 레이아웃 아이디어 제안 등</li>
+          </ul>
+        </div>
+        
+        <div class="tip">
+          <strong>시작 팁:</strong> 처음에는 간단한 질문부터 시작하고, 조금씩 복잡한 작업을 요청해보세요. 
+          AI와의 대화는 연습이 필요한 새로운 스킬입니다. 
+          첫 시도가 완벽하지 않아도 괜찮습니다. 피드백을 주면서 점차 개선해 나가세요.
+        </div>
+      </div>
+
+      <!-- Slide 7: 부서/역할별 활용 아이디어 -->
+      <div class="slide" id="slide7">
+        <h1>모비데이즈 부서별 AI 활용 방안</h1>
+        
+        <div class="team-cards">
+          <div class="team-card">
+            <h4>마케팅팀 (1~5팀)</h4>
+            <ul>
+              <li>매체별 캠페인 성과 분석 및 인사이트 도출</li>
+              <li>경쟁사 광고 전략 분석 및 벤치마킹</li>
+              <li>클라이언트 제안서 및 보고서 초안 작성</li>
+              <li>타겟 인사이트 및 크리에이티브 아이디어 발굴</li>
+            </ul>
+            <div class="chat-example" style="margin-top: 10px;">
+              <div class="chat-header">추천 프롬프트</div>
+              <div class="chat-messages">
+                <div class="chat-message">
+                  <div class="chat-avatar">나</div>
+                  <div class="chat-bubble">
+                    [광고주명] 앱 설치 캠페인의 지난 달 성과를 분석해줘. 예산 5천만원, 목표 CPI 7,000원이고, 실제 달성 CPI는 6,500원이었어. 매체별 성과는 페이스북 CPI 5,800원, 구글 UAC CPI 7,200원, 틱톡 CPI 6,300원이야. 가장 효율이 좋은 매체와 개선점에 대한 인사이트를 제시해줘.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="team-card">
+            <h4>Creative.Lab</h4>
+            <ul>
+              <li>신규 크리에이티브 콘셉트 및 바리에이션 생성</li>
+              <li>광고 카피 작성 및 다양한 버전 테스트</li>
+              <li>SNS 콘텐츠 기획 및 캘린더 수립</li>
+              <li>이미지 및 영상 스토리보드 아이디어 발굴</li>
+            </ul>
+            <div class="chat-example" style="margin-top: 10px;">
+              <div class="chat-header">추천 프롬프트</div>
+              <div class="chat-messages">
+                <div class="chat-message">
+                  <div class="chat-avatar">나</div>
+                  <div class="chat-bubble">
+                    [브랜드명]은 20-30대 여성 타겟 화장품 브랜드야. 이번에 신제품 "올데이 래스팅 파운데이션"을 출시하는데, 주요 포인트는 "24시간 지속력"과 "가벼운 사용감"이야. 인스타그램 광고용 카피 5가지 버전을 각각 30자 이내로 제안해줘. 타겟의 소통 방식과 트렌드를 고려해서 작성해줘.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="team-card">
+            <h4>데이터팀</h4>
+            <ul>
+              <li>대규모 데이터셋 통합 및 파이프라인 구축</li>
+              <li>고급 예측 모델링 및 머신러닝 적용</li>
+              <li>실시간 비즈니스 인텔리전스 대시보드 개발</li>
+              <li>사용자 행동 패턴 분석 및 세그먼트 발굴</li>
+            </ul>
+            <div class="chat-example" style="margin-top: 10px;">
+              <div class="chat-header">추천 프롬프트</div>
+              <div class="chat-messages">
+                <div class="chat-message">
+                  <div class="chat-avatar">나</div>
+                  <div class="chat-bubble">
+                    [데이터셋 첨부] 지난 6개월간의 사용자 활동 데이터를 분석하여 주요 사용자 세그먼트를 식별해줘. 특히 구매 전환율이 높은 그룹의 특성과 행동 패턴을 심층 분석하고, 이들을 타겟팅하기 위한 기계학습 모델 접근 방식을 제안해줘. 또한 이런 인사이트를 실시간으로 모니터링할 수 있는 대시보드 지표 항목도 추천해줘.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="team-card">
+            <h4>HRBP팀</h4>
+            <ul>
+              <li>인터뷰 평가서 작성 및 지원자 분석</li>
+              <li>직무 기술서 및 채용 공고문 작성</li>
+              <li>성과 평가 피드백 문구 개선</li>
+              <li>임직원 만족도 조사 결과 분석 및 인사이트 도출</li>
+            </ul>
+            <div class="chat-example" style="margin-top: 10px;">
+              <div class="chat-header">추천 프롬프트</div>
+              <div class="chat-messages">
+                <div class="chat-message">
+                  <div class="chat-avatar">나</div>
+                  <div class="chat-bubble">
+                    [인터뷰 녹취록 첨부] 이 마케팅 매니저 지원자의 인터뷰 내용을 요약하고, 핵심 역량, 강점, 개선점, 우리 회사 문화와의 적합성 측면에서 분석해줘. 또한 다음 단계 면접에서 더 깊게 물어봐야 할 질문 3가지를 추천해줘.
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <div class="highlight-box">
+          <strong>지금 바로 시작해보세요!</strong><br>
+          위 아이디어 중 하나를 선택해 웍스AI와 대화를 시작해보세요. 처음에는 단순한 요청으로 시작하고,
+          점차 맥락과 구체적인 요구사항을 추가하면서 결과물의 질을 향상시켜 보세요.
+        </div>
+        
+        <div class="ai-check-tip">
+          <strong>AI 응답 확인 질문</strong>
+          <div class="ai-check-questions">
+            <span class="ai-check-question">"이 정보의 출처는?"</span>
+            <span class="ai-check-question">"이 중 가장 확실한/불확실한 부분은?"</span>
+            <span class="ai-check-question">"어떻게 검증할 수 있을까?"</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Slide 8: 전사 지원 계획 -->
+      <div class="slide" id="slide8">
+        <h1>웍스AI 활용 지원 및 평가 계획</h1>
+        <p>웍스AI를 효과적으로 활용하고 업무 혁신을 이끌어낼 수 있도록 다양한 지원 프로그램을 준비하고 있습니다.</p>
+        
+        <div class="dual-box">
+          <div class="box">
+            <h3>단계별 지원 방향</h3>
+            <ul>
+              <li>초기: 팀별 소개 및 맞춤형 활용법 안내</li>
+              <li>적용: 실제 업무 적용 지원 및 문제 해결</li>
+              <li>확산: 성공 사례 공유 및 우수 사례 발굴</li>
+              <li>내재화: AI 활용이 일상 업무 프로세스로 정착</li>
+            </ul>
+          </div>
+          <div class="box">
+            <h3>주요 지원 프로그램</h3>
+            <ul>
+              <li>실시간 질의응답 채널 운영</li>
+              <li>정기적인 활용 팁 및 사례 공유</li>
+              <li>프롬프트 라이브러리 구축 및 공유</li>
+              <li>분기별 성과 분석 및 피드백</li>
+            </ul>
+          </div>
+        </div>
+        
+        <div class="section-divider"></div>
+        
+        <div class="highlight-box">
+          <strong>AI 활용 역량은 평가와 보상에 반영됩니다</strong><br>
+          웍스AI의 효과적인 활용은 업무 효율성과 창의적 문제 해결에 직결되는 핵심 역량입니다.<br>
+          따라서 AI 활용 역량과 성과는 앞으로의 평가 및 보상 체계에 반영될 예정입니다.
+        </div>
+        
+        <div class="tip">
+          AI 활용 역량은 단순히 AI를 많이 사용하는 것이 아니라, AI를 통해 업무 효율과 품질을 높이고
+          창의적인 솔루션을 개발하는 능력을 의미합니다. 양적 사용보다 질적 활용에 초점을 맞춰 평가될 것입니다.
+        </div>
+        
+        <p><strong>성과 측정 방식:</strong></p>
+        <ul>
+          <li><span class="key-point">시간 효율화:</span> 동일 업무 대비 소요 시간 단축</li>
+          <li><span class="key-point">업무 품질:</span> 산출물의 정확성, 완성도, 창의성 향상</li>
+          <li><span class="key-point">혁신적 활용:</span> 새로운 업무 방식이나 솔루션 개발</li>
+          <li><span class="key-point">지식 공유:</span> 효과적인 AI 활용법 및 프롬프트 공유</li>
+        </ul>
+      </div>
+
+      <!-- Slide 9: 마무리 및 시작하기 -->
+      <div class="slide" id="slide9">
+        <h1>AI와 함께하는 새로운 시작</h1>
+        
+        <div class="highlight-box" style="background: linear-gradient(to right, rgba(70, 115, 235, 0.15), rgba(70, 115, 235, 0.05)); border-left: 4px solid var(--accent); margin-bottom: 40px;">
+          <strong>AI의 가치는 여러분이 어떻게 활용하느냐에 달려있습니다</strong><br>
+          AI는 우리의 직무를 대체하는 것이 아니라, 우리가 더 가치 있는 일에 집중할 수 있도록 돕는 도구입니다.<br>
+          웍스AI를 통해 반복적인 업무는 줄이고, 창의적이고 전략적인 업무에 더 많은 시간을 투자해보세요.
+        </div>
+        
+        <div style="background-color: white; border-radius: 16px; box-shadow: var(--shadow); padding: 30px; border: 1px solid #e5e8ec; margin-bottom: 30px;">
+          <h2 style="text-align: center; color: var(--primary); margin-bottom: 25px;">오늘 당장 실행할 3단계</h2>
+          
+          <div style="display: flex; justify-content: space-between; align-items: flex-start; gap: 20px; flex-wrap: wrap;">
+            <div style="flex: 1; min-width: 200px; text-align: center;">
+              <div style="width: 70px; height: 70px; background-color: var(--primary-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 28px; color: var(--primary); font-weight: bold;">1</div>
+              <h3 style="color: var(--primary); margin-bottom: 10px; font-size: 18px;">가입하기</h3>
+              <p style="color: var(--text-medium); font-size: 16px;">초대 메일을 확인하고<br>3분 안에 가입 완료</p>
+            </div>
+            
+            <div style="flex: 1; min-width: 200px; text-align: center;">
+              <div style="width: 70px; height: 70px; background-color: var(--primary-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 28px; color: var(--primary); font-weight: bold;">2</div>
+              <h3 style="color: var(--primary); margin-bottom: 10px; font-size: 18px;">첫 질문하기</h3>
+              <p style="color: var(--text-medium); font-size: 16px;">"내일 회의 아젠다를<br>정리해줘" 요청하기</p>
+            </div>
+            
+            <div style="flex: 1; min-width: 200px; text-align: center;">
+              <div style="width: 70px; height: 70px; background-color: var(--primary-light); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; font-size: 28px; color: var(--primary); font-weight: bold;">3</div>
+              <h3 style="color: var(--primary); margin-bottom: 10px; font-size: 18px;">경험 공유하기</h3>
+              <p style="color: var(--text-medium); font-size: 16px;">팀 슬랙 채널에<br>첫 사용 소감 공유</p>
+            </div>
+          </div>
+        </div>
+        
+        <div style="background-color: var(--accent-light); border-radius: 10px; padding: 20px; display: flex; align-items: center; margin-bottom: 30px;">
+          <div style="flex: 0 0 50px; height: 50px; background-color: var(--accent); border-radius: 50%; display: flex; align-items: center; justify-content: center; margin-right: 20px; font-size: 24px;">💬</div>
+          <div>
+            <h3 style="color: var(--text-dark); margin-bottom: 5px;">도움이 필요하신가요?</h3>
+            <p style="margin-bottom: 0; color: var(--text-medium);">
+              <strong>#웍스ai-사용법</strong> 슬랙 채널에 질문을 남겨주시면 빠르게 답변해 드립니다.<br>
+              자주 묻는 질문과 활용 팁은 웍스AI 포털 내 가이드 센터에서도 확인하실 수 있습니다.
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- 버튼 -->
+      <div class="button-container">
+        <div class="left-buttons">
+          <button id="prevBtn" onclick="changeSlide(-1)">이전</button>
+        </div>
+        <div class="right-buttons">
+          <button id="homeBtn" onclick="location.href='#slide1'; window.location.reload();" style="display: none;">처음으로</button>
+          <button id="nextBtn" onclick="changeSlide(1)">다음</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const slides = document.querySelectorAll('.slide');
+    const progressBar = document.getElementById('progress');
+    const stepCounter = document.getElementById('stepCounter');
+    const prevBtn = document.getElementById('prevBtn');
+    const nextBtn = document.getElementById('nextBtn');
+    const homeBtn = document.getElementById('homeBtn');
+    const cardContainer = document.getElementById('cardContainer');
+
+    let currentStep = 0;
+    const totalSteps = slides.length;
+
+    function updateProgress(index) {
+      const percent = (index / (totalSteps - 1)) * 100;
+      progressBar.style.width = percent + '%';
+      stepCounter.textContent = (index + 1) + ' / ' + totalSteps;
+    }
+
+    function showSlide(index) {
+      // 카드 트랜지션 효과
+      cardContainer.classList.remove('visible');
+      cardContainer.classList.add('hidden');
       
-      .slide-counter {
-        font-size: 12px;
+      setTimeout(() => {
+        slides.forEach((slide, i) => {
+          slide.classList.toggle('active', i === index);
+        });
+        
+        cardContainer.classList.remove('hidden');
+        cardContainer.classList.add('visible');
+        
+        // 스크롤 위치를 맨 위로 초기화
+        cardContainer.scrollTop = 0;
+        
+        updateProgress(index);
+        
+        // 첫 페이지에서는 이전 버튼 숨기기
+        if (index === 0) {
+          prevBtn.style.display = 'none';
+        } else {
+          prevBtn.style.display = 'block';
+        }
+        
+        // 마지막 슬라이드에서는 다음 버튼 숨기고 처음으로 버튼 표시
+        if (index === totalSteps - 1) {
+          nextBtn.style.display = 'none';
+          homeBtn.style.display = 'block';
+        } else {
+          nextBtn.style.display = 'block';
+          homeBtn.style.display = 'none';
+        }
+      }, 200); // 짧은 지연 후 새 슬라이드 표시
+    }
+
+    function changeSlide(direction) {
+      currentStep = Math.min(Math.max(currentStep + direction, 0), totalSteps - 1);
+      showSlide(currentStep);
+    }
+
+    // 키보드 네비게이션
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' && currentStep < totalSteps - 1) {
+        changeSlide(1);
+      } else if (e.key === 'ArrowLeft' && currentStep > 0) {
+        changeSlide(-1);
       }
-      
-      .slide-btn {
-        padding: 0 12px;
-        font-size: 13px;
-      }
-      
-      .slide-controls {
-        padding: 0 16px;
+    });
+
+    // 스와이프 지원 (모바일용)
+    let touchStartX = 0;
+    let touchEndX = 0;
+    
+    document.addEventListener('touchstart', (e) => {
+      touchStartX = e.changedTouches[0].screenX;
+    });
+    
+    document.addEventListener('touchend', (e) => {
+      touchEndX = e.changedTouches[0].screenX;
+      handleSwipe();
+    });
+    
+    function handleSwipe() {
+      if (touchEndX < touchStartX - 50 && currentStep < totalSteps - 1) {
+        // 왼쪽으로 스와이프 - 다음
+        changeSlide(1);
+      } else if (touchEndX > touchStartX + 50 && currentStep > 0) {
+        // 오른쪽으로 스와이프 - 이전
+        changeSlide(-1);
       }
     }
+
+    // 초기 세팅
+    showSlide(currentStep);
+    
+    // 창 크기 조정 시 카드 크기 최적화
+    window.addEventListener('resize', () => {
+      cardContainer.style.maxHeight = (window.innerHeight * 0.85) + 'px';
+    });
+    
+    // 초기 카드 크기 설정
+    cardContainer.style.maxHeight = (window.innerHeight * 0.85) + 'px';
+  </script>
+</body>
+</html>
